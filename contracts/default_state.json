@@ -3,9 +3,9 @@
   "schema_version": 1,
   "views": [
     "face_front",
-    "face_left",
     "body_front",
     "body_left",
+    "body_right",
     "body_back"
   ],
   "character": {

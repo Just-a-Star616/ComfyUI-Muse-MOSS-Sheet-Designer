@@ -126,6 +126,13 @@
     "detail": "detail close-ups"
   },
   "presets": {
+    "template": [
+      "face_front",
+      "body_front",
+      "body_left",
+      "body_right",
+      "body_back"
+    ],
     "five": [
       "face_front",
       "face_left",
