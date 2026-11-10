@@ -1,0 +1,9 @@
+[project]
+name = "muse-moss-sheet-designer"
+description = "MOSS-style character sheet designer (13+ views, part prompts, styles, layout) that generates with FLUX.2 Klein, Qwen Image 2.1, Flux3 Klein or MOSS-Image. Per-view confirm/re-roll/prompt/edit cards with a Build final sheet step, Muse 5-panel template output, character presets and dataset prompt lists."
+version = "1.0.0"
+license = { file = "LICENSE" }
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/Just-a-Star616/ComfyUI-Muse-MOSS-Sheet-Designer"

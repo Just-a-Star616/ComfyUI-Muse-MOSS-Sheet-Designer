@@ -1,0 +1,614 @@
+{
+ "A-Poses (6)": {
+  "width": 896,
+  "height": 1536,
+  "prompts": [
+   {
+    "text": "in a neutral A-pose, a full body front view of the character standing with arms by their sides. Keep the exact same character. In front of a plain white background, no shadows.",
+    "outfit": true,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "in a neutral A-pose, a full body, true 90-degree side view (profile) of the character standing with arm by side, facing to the LEFT. Keep the exact same character. In front of a plain white background, no shadows.",
+    "outfit": true,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "in a neutral A-pose, a full body, true 90-degree side view (profile) of the character standing with arm by side, facing to the RIGHT. Keep the exact same character. In front of a plain white background, no shadows.",
+    "outfit": true,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "in a neutral A-pose, a full body back view of the character standing with arms by their sides. Keep the exact same character. In front of a plain white background, no shadows.",
+    "outfit": true,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "in a neutral A-pose, a full body three-quarter 45-degree front view of the character standing with arms by their sides facing to the FRONT/RIGHT. Keep the exact same character. In front of a plain white background, no shadows.",
+    "outfit": true,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "in a neutral A-pose, a full body three-quarter 45-degree front view of the character standing with arms by their sides facing to the FRONT/LEFT. Keep the exact same character. In front of a plain white background, no shadows.",
+    "outfit": true,
+    "body": false,
+    "nude": false
+   }
+  ]
+ },
+ "Portrait 896x1536 (18)": {
+  "width": 896,
+  "height": 1536,
+  "prompts": [
+   {
+    "text": "full body from head to feet, eye-level view. She stands facing the viewer, weight on one leg, arms relaxed at her sides, with a calm, friendly expression. She wears a fitted white t-shirt, light-wash jeans and white sneakers. Plain light gray background, soft even lighting.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "full body from head to feet in a three-quarter back view. She looks back over her right shoulder at the viewer with a small smile. She wears a fitted black turtleneck, gray slacks and black loafers. Plain light gray background, soft even lighting.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "full body on a rainy city street at night. Wearing her default outfit from reference image 1, she holds a clear umbrella and looks up at the rain with a calm expression. Wet pavement reflecting shop signs, cool blue night light with warm window glow.",
+    "outfit": true,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "full body from a low angle looking up at her on a rocky cliff edge above a misty valley. She wears a fantasy leather adventurer vest over a simple shirt, a brown belt with pouches, brown trousers and boots, her ponytail blowing in the wind, with a determined expression. Dramatic clouds and shafts of sunlight.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "full body on a sandy beach. She walks toward the viewer mid-stride, one arm swinging, with a confident, playful grin. She wears a black string bikini. Golden-hour sunlight from the side, the sea behind her.",
+    "outfit": false,
+    "body": true,
+    "nude": false
+   },
+   {
+    "text": "full-body mirror selfie. She stands in front of an ornate full-length mirror holding a phone at chest height, body turned slightly toward the mirror, with a confident expression. She wears a short black dress, black high heels, a statement necklace and matching bracelets. Bright bedroom, soft natural light.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "full body on a city street at night. She stands in a contrapposto pose with one hand on her hip, facing the viewer. She wears a red dress with a long slit up one side, high heels and red lipstick. Dark street lighting with deep shadows, blurred city lights behind her.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "full body in a bright gym. She is caught mid-air jumping rope, ponytail swinging, focused expression with sweat drops, wearing black yoga pants, a gray sports bra and sneakers, headphones around her neck. Bright overhead gym lighting.",
+    "outfit": false,
+    "body": true,
+    "nude": false
+   },
+   {
+    "text": "full body from behind on a penthouse balcony at golden hour. She leans her forearms on the railing and turns her head to look back over her right shoulder at the viewer. She wears red lace lingerie. The city skyline glows behind her in warm evening light.",
+    "outfit": false,
+    "body": true,
+    "nude": false
+   },
+   {
+    "text": "full body on a busy shopping street. She has just dropped her shopping bags and stares wide-eyed in shock, mouth open, wearing a striped long-sleeve shirt and a navy pleated skirt. Afternoon sunlight, crowds blurred behind her.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "medium shot in a cozy bookshop. Wearing her default outfit from reference image 1, she stands on tiptoe reaching for a book on a high shelf, glancing back at the viewer with a curious expression. Warm lamplight, tall wooden shelves packed with books.",
+    "outfit": true,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "three-quarter-length shot in an urban alley. She leans against a brick wall with her hands in her jacket pockets and a cool smirk, wearing a denim jacket over a plain tank top and dark trousers. Overcast daylight, graffiti and fire escapes behind her.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "medium shot on a snowy town street at dusk. She laughs joyfully as snow falls, wearing a hooded winter coat and a thick red scarf, hood down. Warm shop lights glowing behind her, snowflakes in the air.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "three-quarter-length shot from her head to her knees. She leans lightly on a kitchen doorframe facing the viewer with a slight smile, wearing a cropped red off-the-shoulder t-shirt and denim cutoff shorts. Soft natural light, a warm kitchen behind her.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "three-quarter-length shot from a low angle at hip height looking up. She stands facing the viewer with a relaxed smile, wearing a cropped pink knit sweater and white slacks. Blue sky with soft white clouds behind her.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "dynamic three-quarter-length shot on a neon-lit cyberpunk street at night. She stands turned slightly to the right with one hand raised to her ponytail, looking at the viewer. She wears a fitted black tank top and dark cargo pants. Pink and cyan neon light on her skin.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "medium shot in a living room. She stands with her arms crossed, cheeks puffed out in an exaggerated angry pout, wearing a yellow hoodie and denim shorts. Bright daytime interior light.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "medium shot at a summer festival at night. She holds a candy apple and smiles up at the sky, wearing a navy yukata with a white flower pattern. Fireworks bursting overhead, glowing paper lanterns and festival stalls behind her.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   }
+  ]
+ },
+ "Square close-ups 1216x1216 (11)": {
+  "width": 1216,
+  "height": 1216,
+  "prompts": [
+   {
+    "text": "tight head-and-shoulders view cropped from just above her head to her collarbones, eye-level view. She faces the viewer straight on with her eyes on the viewer, shoulders square, a neutral resting expression with her mouth closed. Bare shoulders. Plain light gray background, soft even lighting.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "tight head-and-shoulders view cropped from just above her head to her collarbones, eye-level view. She is in a true 90-degree side profile facing the right edge of the frame, only one eye visible, looking straight ahead, shoulders side-on. Bare shoulders. Plain light gray background, soft even lighting.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "tight head-and-shoulders view cropped from just above her head to her collarbones, eye-level view. She is in a true 90-degree side profile facing the left edge of the frame, only one eye visible, looking straight ahead, shoulders side-on. Bare shoulders. Plain light gray background, soft even lighting.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "head-and-shoulders view from directly behind her, eye-level view. Her back is to the viewer: the back of her head, her high ponytail and her bare shoulder blades are visible, her face is not visible. Plain light gray background, soft even lighting.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "extreme close-up of her face from brows to chin. She looks into the viewer's eyes with a soft smile, showing the fine detail of her purple irises, eyelashes and brows. Plain light gray background, soft front lighting.",
+    "outfit": true,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "close-up on a park bench at dusk. She sits with tears welling in her eyes and a trembling, sad expression, wearing a beige trench coat. Fading orange sky, bare trees and a lit street lamp behind her.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "close-up in a dark room lit by a single hard light from the side. She looks at the viewer with a serious, intense expression, half her face in deep shadow, wearing a black turtleneck. Strong shadow falloff, black background.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "waist-up shot at a café table by a large window. Wearing her default outfit from reference image 1, she holds a coffee cup and laughs openly with her eyes closed. Bright daylight through the window, a blurred street outside.",
+    "outfit": true,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "waist-up shot in a small bakery kitchen. She kneads dough on a floury counter with a focused expression and a smudge of flour on her cheek, wearing a canvas work apron over a t-shirt with her sleeves rolled up. Soft early-morning window light.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "close-up in side profile facing the left edge of the frame. She looks out of a rain-speckled window with a melancholic expression, one hand raised near her face, wearing a coat with a fur-trimmed hood. Raindrops on the glass, soft overcast window light, warm highlights and teal shadows.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "waist-up shot at a street food stall at night. She lifts noodles from a steaming bowl of ramen with chopsticks, eyes sparkling with delight, wearing a casual olive bomber jacket over a white t-shirt. Warm stall lights, steam rising.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   }
+  ]
+ },
+ "Landscape 1536x896 (11)": {
+  "width": 1536,
+  "height": 896,
+  "prompts": [
+   {
+    "text": "medium shot from slightly above. She is curled up on a sofa reading a paperback, wearing an oversized cream knit sweater and blue jeans, with a sleepy, content expression. Cozy living room, warm lamp light, a mug on the side table.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "medium shot in a wooden tavern. She sits at a table raising a tankard in a cheerful toast, mouth open mid-laugh, wearing a wine-red tunic and dark leggings. Warm firelight from a hearth, lanterns and wooden beams behind her.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "full body in a forest clearing. She kneels to examine a glowing mushroom with a curious, wide-eyed expression, wearing a green hiking jacket, cargo shorts, hiking boots and a small backpack. Dappled sunlight through the trees.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "medium shot at a slight dutch angle in a modern office. She sits at her desk typing on a laptop with furrowed brows and a frustrated pout, a pen tucked behind her ear. She wears a white blouse unbuttoned at the collar and a black pencil skirt. Soft window light, city view behind her.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "medium shot at night in a dim bedroom. She sits cross-legged on the floor gripping a game controller, leaning forward with an excited, competitive grin, wearing an oversized gray t-shirt and shorts. Blue glow from a TV screen on her face.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "view from above. She lies asleep on her side in bed with her eyes closed and a peaceful expression, hair loose across the pillow, wearing light blue pajamas. Morning sunlight through sheer curtains.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "full body wide shot on a train station platform in the morning. Wearing her default outfit from reference image 1, she checks her wristwatch with a slightly impatient frown, a leather bag on her shoulder. Soft morning sunlight, a train pulling in behind her.",
+    "outfit": true,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "wide landscape shot with her small in the frame, walking barefoot along the wet edge of a beach and carrying her sandals. She wears a simple sleeveless linen sundress and smiles softly at the sea. Golden-hour sunset, long reflections on the wet sand.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "dynamic full-body shot from a low diagonal angle. She sprints down a city sidewalk to catch a bus, ponytail flying and arms pumping, with a panicked expression, wearing a navy track jacket, black leggings and sneakers. Motion lines, bright morning light.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "wide landscape shot. She rides a bicycle along a riverside path on a sunny summer day, smiling into the breeze, wearing a white short-sleeve blouse and a denim skirt. Green riverbank, blue sky with tall cumulus clouds.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "wide landscape shot at sunset with her small in the frame, standing on a grassy hilltop in a three-quarter back view, her long dark coat and ponytail blowing in the wind. Vast orange and purple sky, distant mountains.",
+    "outfit": true,
+    "body": false,
+    "nude": false
+   }
+  ]
+ },
+ "R-Rated 1216x1216 (25)": {
+  "width": 1216,
+  "height": 1216,
+  "prompts": [
+   {
+    "text": "A full-body photograph from head to feet, camera at waist height. She stands facing the camera straight on with her eyes on the lens, her hands resting lightly on her hips. She wears sheer black lingerie. Plain neutral background, soft studio light.",
+    "outfit": false,
+    "body": true,
+    "nude": false
+   },
+   {
+    "text": "An upper-body photograph, camera at eye level. She is in true 90-degree side profile facing the right edge of the frame, with only one eye visible, looking slightly downward, a silk robe slipped off her near shoulder. Soft window light from in front of her.",
+    "outfit": false,
+    "body": true,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph of her from behind, camera at waist height. She stands with her back to the camera and turns her head to look back over her right shoulder, so only part of her face shows. She wears only lace panties. Plain backdrop, warm low-key light.",
+    "outfit": false,
+    "body": true,
+    "nude": false
+   },
+   {
+    "text": "An upper-body photograph, camera at eye level. She is in true 90-degree side profile facing the left edge of the frame, with only one eye visible, one hand running through her hair. She wears a barely-there bralette. Soft light, shallow depth of field.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "A close-up beauty photograph of her face and bare shoulders, camera at eye level. She faces the camera with her lips softly parted and her eyes on the lens. Dramatic side light, plain dark background.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph, camera at her eye level. She kneels on a bed, sitting upright with her hands on her thighs, facing the camera. She wears a white lace bra and matching panties. Soft bedroom light.",
+    "outfit": false,
+    "body": true,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph, camera at her seated eye level. She sits on the edge of a luxury bathtub, wrapped loosely in a white towel that slips at her chest, facing the camera. Steam in the air, soft ambient bathroom light.",
+    "outfit": true,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph, camera at waist height. She stands in a doorway with one hand holding the frame, facing the camera. She wears only an unbuttoned men's white dress shirt. Warm interior light behind her.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph at night, camera at waist height. She leans with her back against a large window, her hands pressed to the glass beside her, facing the camera. She wears a sheer nightgown. City lights glowing behind her.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph, camera at bed height. She lies on her side on a rumpled bed, propped on one elbow, looking toward the camera. She wears only black panties. Soft lamplight.",
+    "outfit": false,
+    "body": true,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph, camera at her eye level. She kneels on the floor with her back slightly arched, looking up toward the camera. She wears a strappy black bodysuit. Soft overhead light.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph, camera at her seated eye level. She sits sideways in an armchair with her legs draped over the arm, facing the camera with a relaxed, sensual expression. She wears a silk slip dress. Soft evening light.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph of her from behind in a hotel room, camera at waist height. She stands with her back to the camera and looks back over her left shoulder, so only part of her face shows. She wears only a garter belt and stockings. Soft window light.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph, camera at her seated eye level. She sits on a kitchen counter facing the camera, wearing an oversized knit sweater that slips off one shoulder and nothing else. Soft morning light.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "A three-quarter-length photograph in an office, camera at eye level. She leans forward over a desk toward the camera, her blouse unbuttoned low, wearing a black skirt. Dramatic side light.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "A three-quarter-length photograph in a glass shower stall, camera at eye level. She stands facing the camera with her hands in her wet hair, water running down her skin. Steam on the glass, soft diffused light.",
+    "outfit": true,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph from above the bed. She lies on her back on silk sheets with one arm above her head, looking up toward the camera. She wears a thin camisole and panties. Soft moonlight through the curtains.",
+    "outfit": false,
+    "body": true,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph, camera at her seated eye level. She sits cross-legged on the floor in front of a mirror, facing the camera. She wears only a lace bralette and shorts. Soft vanity lighting.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph on a balcony at night, camera at waist height. She stands facing the camera in a sheer robe that hangs open at the front. The city skyline behind her, cool blue ambient light.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph, camera at her eye level. She kneels on a couch facing the camera. She wears a low-cut tank top pulled down at one shoulder and short shorts. Warm indoor light.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph, camera at bed height. She lies on her stomach on a bed, propped on her elbows, facing the camera. She wears a thin tank top and panties. Soft natural window light.",
+    "outfit": false,
+    "body": true,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph at night, camera at her seated eye level. She sits on the edge of a pool with wet skin, looking toward the camera. She wears a micro bikini. Underwater pool lights glowing.",
+    "outfit": false,
+    "body": true,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph in a dimly lit hallway, camera at waist height. She stands with her back against the wall, facing the camera. She wears a short silk robe loosely tied. Soft rim light.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "A full-body photograph, camera at her seated eye level. She sits on the floor with her legs extended, leaning back on her hands, facing the camera. She wears only a long open cardigan. Soft lamplight.",
+    "outfit": false,
+    "body": false,
+    "nude": false
+   },
+   {
+    "text": "A three-quarter-length photograph in a bedroom, camera at eye level. She stands in front of a full-length mirror adjusting a sheer bodysuit, her body turned three-quarters toward the camera. Soft bedroom light.",
+    "outfit": true,
+    "body": false,
+    "nude": false
+   }
+  ]
+ },
+ "XXX-Rated 1216x1216 (25)": {
+  "width": 1216,
+  "height": 1216,
+  "prompts": [
+   {
+    "text": "A full-body photograph from head to feet, camera at waist height. She stands facing the camera straight on with her eyes on the lens, her hands resting lightly on her hips. Plain neutral background, soft studio light.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "An upper-body photograph, camera at eye level. She is in true 90-degree side profile facing the right edge of the frame, with only one eye visible, looking slightly downward, a silk robe slipped off her near shoulder. Soft window light from in front of her.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph of her from behind, camera at waist height. She stands with her back to the camera and turns her head to look back over her right shoulder, so only part of her face shows. She wears only lace panties. Plain backdrop, warm low-key light.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "An upper-body photograph, camera at eye level. She is in true 90-degree side profile facing the left edge of the frame, with only one eye visible, one hand running through her hair. Soft light, shallow depth of field.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A close-up beauty photograph of her face and bare shoulders, camera at eye level. She faces the camera with her lips softly parted and her eyes on the lens. Dramatic side light, plain dark background.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph, camera at her eye level. She kneels on a bed, sitting upright with her hands on her thighs, facing the camera. Soft bedroom light.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph, camera at her seated eye level. She sits on the edge of a luxury bathtub, legs spread displaying genitalia, facing the camera. Steam in the air, soft ambient bathroom light.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph, camera at waist height. She stands in a doorway with one hand holding the frame, facing the camera. She wears only an unbuttoned men's white dress shirt exposing her breasts and groin. Warm interior light behind her.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph at night, camera at waist height. She leans with her back against a large window, her hands pressed to the glass beside her, facing the camera. City lights glowing behind her.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph, camera at bed height. She lies on her side on a rumpled bed, propped on one elbow, looking toward the camera. Soft lamplight.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph, camera at her eye level. She kneels on the floor with her back slightly arched, looking up toward the camera. Soft overhead light.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph, camera at her seated eye level. She sits sideways in an armchair with her legs draped over the arm, facing the camera with a relaxed, sensual expression. Soft evening light.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph of her from behind in a hotel room, camera at waist height. She stands with her back to the camera and looks back over her left shoulder, so only part of her face shows. Soft window light.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph, camera at her seated eye level. She sits on a kitchen counter facing the camera. Soft morning light.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A three-quarter-length photograph in an office, camera at eye level. She leans forward over a desk toward the camera. Dramatic side light.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A three-quarter-length photograph in a glass shower stall, camera at eye level. She stands facing the camera with her hands in her wet hair, water running down her skin. Steam on the glass, soft diffused light.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph from above the bed. She lies on her back on silk sheets with one arm above her head, looking up toward the camera. Soft moonlight through the curtains.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph, camera at her seated eye level. She sits cross-legged on the floor in front of a mirror, facing the camera. Soft vanity lighting.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph on a balcony at night, camera at waist height. She stands facing the camera. The city skyline behind her, cool blue ambient light.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph, camera at her eye level. She kneels on a couch facing the camera. Warm indoor light.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph, camera at bed height. She lies on her stomach on a bed, propped on her elbows, facing the camera. Soft natural window light.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph at night, camera at her seated eye level. She sits on the edge of a pool with wet skin, looking toward the camera. She wears a micro string bikini. Underwater pool lights glowing.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph in a dimly lit hallway, camera at waist height. She stands with her back against the wall, facing the camera. Soft rim light.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A full-body photograph, camera at her seated eye level. She sits on the floor with her legs extended, leaning back on her hands, facing the camera. Soft lamplight.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   },
+   {
+    "text": "A three-quarter-length photograph in a bedroom, camera at eye level. She stands in front of a full-length mirror, her body turned three-quarters toward the camera. Soft bedroom light.",
+    "outfit": false,
+    "body": true,
+    "nude": true
+   }
+  ]
+ }
+}

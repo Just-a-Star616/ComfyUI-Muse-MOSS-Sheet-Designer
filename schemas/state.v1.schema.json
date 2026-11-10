@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MOSS Image Character Sheet Designer state v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "kind",
+    "schema_version",
+    "views",
+    "character",
+    "part_prompts",
+    "appearance",
+    "style",
+    "background",
+    "prompt_format",
+    "negative_prompt",
+    "size"
+  ],
+  "properties": {
+    "kind": {
+      "const": "moss_image_character_sheet"
+    },
+    "schema_version": {
+      "const": 1,
+      "type": "integer"
+    },
+    "views": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 15,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "face_front",
+          "face_left",
+          "face_right",
+          "face_3q_left",
+          "face_3q_right",
+          "face_back",
+          "body_front",
+          "body_3q",
+          "body_left",
+          "body_right",
+          "body_back",
+          "clothing_front",
+          "clothing_back",
+          "hands",
+          "feet"
+        ]
+      }
+    },
+    "character": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "outfit"
+      ],
+      "properties": {
+        "identity": {
+          "type": "string",
+          "maxLength": 2000,
+          "$comment": "Runtime also enforces <= 2000 UTF-16 code units and valid Unicode. JSON Schema maxLength counts Unicode code points."
+        },
+        "outfit": {
+          "type": "string",
+          "maxLength": 2000,
+          "$comment": "Runtime also enforces <= 2000 UTF-16 code units and valid Unicode. JSON Schema maxLength counts Unicode code points."
+        }
+      }
+    },
+    "part_prompts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "head_hair": {
+          "type": "string",
+          "maxLength": 1000,
+          "$comment": "Runtime also enforces <= 1000 UTF-16 code units and valid Unicode. JSON Schema maxLength counts Unicode code points."
+        },
+        "face": {
+          "type": "string",
+          "maxLength": 1000,
+          "$comment": "Runtime also enforces <= 1000 UTF-16 code units and valid Unicode. JSON Schema maxLength counts Unicode code points."
+        },
+        "upper_clothing": {
+          "type": "string",
+          "maxLength": 1000,
+          "$comment": "Runtime also enforces <= 1000 UTF-16 code units and valid Unicode. JSON Schema maxLength counts Unicode code points."
+        },
+        "back_clothing": {
+          "type": "string",
+          "maxLength": 1000,
+          "$comment": "Runtime also enforces <= 1000 UTF-16 code units and valid Unicode. JSON Schema maxLength counts Unicode code points."
+        },
+        "lower_body": {
+          "type": "string",
+          "maxLength": 1000,
+          "$comment": "Runtime also enforces <= 1000 UTF-16 code units and valid Unicode. JSON Schema maxLength counts Unicode code points."
+        },
+        "hands": {
+          "type": "string",
+          "maxLength": 1000,
+          "$comment": "Runtime also enforces <= 1000 UTF-16 code units and valid Unicode. JSON Schema maxLength counts Unicode code points."
+        },
+        "footwear": {
+          "type": "string",
+          "maxLength": 1000,
+          "$comment": "Runtime also enforces <= 1000 UTF-16 code units and valid Unicode. JSON Schema maxLength counts Unicode code points."
+        },
+        "other": {
+          "type": "string",
+          "maxLength": 1000,
+          "$comment": "Runtime also enforces <= 1000 UTF-16 code units and valid Unicode. JSON Schema maxLength counts Unicode code points."
+        }
+      }
+    },
+    "appearance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hand_state",
+        "clothing_type",
+        "footwear_state"
+      ],
+      "properties": {
+        "hand_state": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "bare",
+            "gloved"
+          ]
+        },
+        "clothing_mode": {
+          "type": "string",
+          "enum": [
+            "worn",
+            "garment"
+          ],
+          "$comment": "Legacy input only. Clothing views now depict garments; normalization removes this field."
+        },
+        "clothing_type": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "pants",
+            "skirt_robe"
+          ]
+        },
+        "footwear_state": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "shod",
+            "unshod"
+          ]
+        }
+      }
+    },
+    "style": {
+      "type": "string",
+      "enum": [
+        "none",
+        "anime",
+        "photo",
+        "realistic_painting",
+        "semi_realistic_anime",
+        "oil_painting",
+        "watercolor",
+        "gouache",
+        "colored_pencil",
+        "3d"
+      ]
+    },
+    "background": {
+      "type": "string",
+      "enum": [
+        "white",
+        "light_gray"
+      ]
+    },
+    "prompt_format": {
+      "type": "string",
+      "enum": [
+        "auto",
+        "layout_json",
+        "caption"
+      ]
+    },
+    "negative_prompt": {
+      "type": "string",
+      "maxLength": 4000,
+      "$comment": "Runtime also enforces <= 4000 UTF-16 code units and valid Unicode. JSON Schema maxLength counts Unicode code points."
+    },
+    "size": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "body_height",
+        "pixel_budget",
+        "manual_width",
+        "manual_height"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "manual"
+          ]
+        },
+        "body_height": {
+          "type": "integer",
+          "minimum": 256,
+          "maximum": 16384,
+          "multipleOf": 16
+        },
+        "pixel_budget": {
+          "type": "integer",
+          "enum": [
+            1000000,
+            1500000,
+            2000000,
+            4000000
+          ]
+        },
+        "manual_width": {
+          "type": "integer",
+          "minimum": 256,
+          "maximum": 16384,
+          "multipleOf": 16
+        },
+        "manual_height": {
+          "type": "integer",
+          "minimum": 256,
+          "maximum": 16384,
+          "multipleOf": 16
+        }
+      }
+    }
+  },
+  "$comment": "Preview accepts blank identity; execution requires at least one non-whitespace character. Runtime rejects bool/float/exponent tokens for integer fields; total input <= 64 KiB UTF-8. Bounds additionally use ComfyUI MAX_RESOLUTION."
+}

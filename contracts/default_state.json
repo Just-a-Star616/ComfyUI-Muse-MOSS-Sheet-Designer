@@ -1,0 +1,32 @@
+{
+  "kind": "moss_image_character_sheet",
+  "schema_version": 1,
+  "views": [
+    "face_front",
+    "face_left",
+    "body_front",
+    "body_left",
+    "body_back"
+  ],
+  "character": {
+    "identity": "",
+    "outfit": ""
+  },
+  "part_prompts": {},
+  "appearance": {
+    "hand_state": "auto",
+    "clothing_type": "auto",
+    "footwear_state": "auto"
+  },
+  "style": "none",
+  "background": "white",
+  "prompt_format": "auto",
+  "negative_prompt": "",
+  "size": {
+    "mode": "auto",
+    "body_height": 1120,
+    "pixel_budget": 2000000,
+    "manual_width": 1536,
+    "manual_height": 1024
+  }
+}

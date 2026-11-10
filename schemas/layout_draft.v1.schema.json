@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Designer v1 supported subset of official MOSS Layout draft",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "width",
+    "height",
+    "bbox_coord_space",
+    "bbox_format",
+    "summary",
+    "items"
+  ],
+  "properties": {
+    "width": {
+      "type": "integer",
+      "minimum": 16,
+      "multipleOf": 16
+    },
+    "height": {
+      "type": "integer",
+      "minimum": 16,
+      "multipleOf": 16
+    },
+    "bbox_coord_space": {
+      "const": "abs"
+    },
+    "bbox_format": {
+      "const": "xyxy"
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canvas",
+        "caption"
+      ],
+      "properties": {
+        "canvas": {
+          "type": "string",
+          "enum": [
+            "single",
+            "multi_panel"
+          ]
+        },
+        "caption": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 13,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "label",
+          "caption",
+          "bbox"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "object",
+              "character"
+            ]
+          },
+          "caption": {
+            "type": "string",
+            "minLength": 1
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$comment": "This Designer emits character/object items only. This is intentionally narrower than the official general-purpose text/tags/palette schema. Cross-field bbox bounds are checked separately."
+}

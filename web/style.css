@@ -1,0 +1,175 @@
+.moss-designer {
+  --moss-bg: #161c23;
+  --moss-panel: #202934;
+  --moss-text: #edf3f8;
+  --moss-muted: #bdcbd9;
+  --moss-accent: #85e7d6;
+  --comfy-widget-min-height: 760px;
+  --comfy-widget-height: 100%;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 760px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: linear-gradient(160deg, #1c2430, #141b22 60%);
+  color: var(--moss-text);
+  color-scheme: dark;
+  font: 18px/1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  border: 1px solid #4c5e70;
+  border-radius: 11px;
+  overflow: auto;
+  container-type: inline-size;
+  scrollbar-width: thin;
+}
+.moss-designer * { box-sizing: border-box; }
+.moss-generated-prompt { font-size: 14px; }
+.moss-generated-prompt summary { cursor: pointer; color: var(--moss-muted); }
+.moss-generated-prompt pre { max-height: 220px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; user-select: text; padding: 8px; border: 1px solid #4c5e70; border-radius: 5px; }
+.moss-designer > :not(.moss-stage):not(.moss-part-panel) { flex-shrink: 0; }
+.moss-designer [hidden] { display: none !important; }
+.moss-designer button, .moss-designer input, .moss-designer select, .moss-designer textarea { font: inherit; color: inherit; }
+.moss-designer button { cursor: pointer; }
+.moss-designer button:disabled, .moss-designer select:disabled, .moss-designer input:disabled { cursor: default; opacity: .72; }
+.moss-designer :focus-visible { outline: 2px solid #85e7d6; outline-offset: 2px; }
+.moss-intro { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 17px; min-height: 24px; }
+.moss-count { white-space: nowrap; color: var(--moss-accent); font-size: 15px; font-variant-numeric: tabular-nums; }
+.moss-cards { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+.moss-card { position: relative; min-width: 0; padding: 5px 3px 7px; background: #242d38; border: 1px solid #607183; border-radius: 8px; display: flex; flex-direction: column; align-items: center; gap: 3px; transition: border-color .15s, background .15s; }
+.moss-card[aria-pressed=true] { border-color: #85e7d6; background: linear-gradient(150deg, #28443e, #202f34); box-shadow: inset 0 0 0 1px #57cdb71f; }
+.moss-card:hover:not(:disabled) { border-color: #a0e9dc; }
+.moss-card-figure { height: 80px; width: 100%; display: block; filter: saturate(.2); opacity: .75; }
+.moss-card[aria-pressed=true] .moss-card-figure { filter: none; opacity: 1; }
+.moss-card-figure svg, .moss-card-figure img { width: 100%; height: 100%; display: block; }
+.moss-card-label { font-size: 16px; line-height: 22px; text-align: center; overflow-wrap: anywhere; }
+.moss-check { position: absolute; right: 6px; top: 6px; font-size: 13px; width: 19px; height: 19px; display: grid; place-items: center; border: 1px solid #7b8da0; border-radius: 50%; color: transparent; background: #202a34; }
+.moss-card[aria-pressed=true] .moss-check { background: #85e7d6; border-color: #85e7d6; color: #15362f; }
+.moss-preset-row { display: flex; align-items: center; gap: 12px; min-height: 40px; }
+.moss-preset-row label { color: var(--moss-muted); font-size: 16px; }
+.moss-select { appearance: auto; flex: 1; width: 100%; min-width: 0; height: 40px; background: #26313d; border: 1px solid #687e92; border-radius: 6px; padding: 6px 10px; }
+.moss-select option { color: var(--moss-text); background: #26313d; }
+.moss-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 10px; border: 1px solid #4b6072; border-radius: 8px; background: #1c2630; }
+.moss-mode-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.moss-field-title { color: var(--moss-muted); font-size: 16px; }
+.moss-mode-group { display: flex; border: 1px solid #687e92; border-radius: 6px; overflow: hidden; }
+.moss-mode { min-height: 38px; background: #26313e; border: 0; padding: 6px 12px; font-size: 17px !important; }
+.moss-mode[aria-pressed=true] { background: #486961; color: #f0fff9; }
+.moss-number-row { display: flex; align-items: flex-start; flex: 1; gap: 10px; min-width: 0; }
+.moss-number-field { flex: 1; min-width: 110px; }
+.moss-number-field label { display: block; font-size: 16px; color: var(--moss-muted); margin-bottom: 4px; white-space: nowrap; }
+.moss-input-line { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.moss-input-line input { width: 100%; min-width: 0; height: 40px; padding: 6px 10px; background: #101a23; border: 1px solid #687e92; border-radius: 6px; font-variant-numeric: tabular-nums; }
+.moss-height-choices { flex: none; font-variant-numeric: tabular-nums; }
+.moss-draft-note { display: block; font-size: 14px; color: #f2d39f; line-height: 1.4; margin-top: 5px; }
+.moss-draft-note:empty { display: none; }
+.moss-has-draft input { border-color: #e8ca95; }
+.moss-mode-hint { flex-basis: 100%; font-size: 14px; color: var(--moss-muted); }
+.moss-link-button { background: transparent; border: 0; padding: 6px 0; color: var(--moss-accent) !important; font-size: 16px !important; }
+.moss-metrics { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; min-height: 30px; padding: 0 1px; }
+.moss-dimensions { font-size: 24px; font-weight: 650; letter-spacing: .2px; font-variant-numeric: tabular-nums; }
+.moss-pixels { font-size: 15px; color: var(--moss-muted); flex: 1; white-space: nowrap; }
+.moss-experimental { font-size: 14px; background: #4b3e2c; border: 1px solid #b59561; color: #f4d7a6; padding: 3px 8px; border-radius: 5px; }
+.moss-resolution-note { font-size: 14px; color: #d8c6a8; line-height: 1.4; }
+.moss-status { color: var(--moss-muted); font-size: 14px; line-height: 20px; }
+.moss-status:empty { display: none; }
+.moss-error { font-size: 16px; padding: 10px; border: 1px solid #b6806c; border-radius: 6px; background: #3e2c28; color: #ffddca; overflow-wrap: anywhere; }
+.moss-retry, .moss-apply { padding: 8px 12px; min-height: 40px; border: 1px solid #7fac9d; border-radius: 6px; background: #2a453f; color: #e1fff5 !important; align-self: flex-start; }
+.moss-preview-head { display: flex; justify-content: space-between; gap: 8px; font-size: 16px; letter-spacing: .8px; color: #ccd8e4; }
+.moss-preview-tag { font-size: 14px; letter-spacing: 0; color: var(--moss-muted); }
+.moss-stage { position: relative; min-height: 230px; flex: 1; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 1px solid #586f81; border-radius: 8px; background: radial-gradient(ellipse at 50% 45%, #303e49, #202a34 73%); }
+.moss-sheet { position: relative; flex: none; background: white; border-radius: 2px; box-shadow: 0 9px 25px #0006; overflow: hidden; }
+.moss-panel { position: absolute; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.moss-panel svg, .moss-panel img { display: block; width: 100%; height: 100%; object-fit: contain; overflow: hidden; }
+.moss-reference .moss-panel::after { content: ""; position: absolute; inset: 0; box-sizing: border-box; border: var(--moss-frame-width, 1px) solid #000; pointer-events: none; }
+.moss-empty { padding: 20px; font-size: 16px; text-align: center; color: var(--moss-muted); }
+.moss-stale { opacity: .75; }
+.moss-footer { font-size: 14px; line-height: 1.4; color: var(--moss-muted); }
+.moss-json-editor { padding-top: 8px; }
+.moss-json-editor summary { cursor: pointer; color: #d2e4ed; }
+.moss-json-editor textarea { resize: vertical; min-height: 160px; width: 100%; margin-top: 8px; padding: 10px; background: #101820; border: 1px solid #687e92; border-radius: 6px; font: 16px/1.5 ui-monospace, monospace; }
+.moss-json-editor p { font-size: 14px; color: var(--moss-muted); }
+.moss-json-editor .moss-apply { display: block; }
+@container (max-width: 720px) {
+  .moss-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .moss-mode-row, .moss-number-row { flex-basis: 100%; }
+  .moss-intro { flex-wrap: wrap; gap: 3px; }
+  .moss-pixels { flex-basis: 100%; order: 3; }
+  .moss-experimental { margin-left: auto; }
+}
+@container (max-width: 480px) {
+  .moss-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .moss-preset-row { flex-wrap: wrap; }
+  .moss-preset-row .moss-select { flex-basis: 100%; }
+  .moss-number-row { flex-wrap: wrap; }
+  .moss-number-field { min-width: 120px; }
+}
+@media (prefers-reduced-motion: reduce) { .moss-card { transition: none; } }
+.moss-artwork { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; }
+.moss-artwork img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.moss-artwork svg { width: 100%; height: 100%; display: block; }
+
+/* Both tabs reuse the same remaining node area. The actual Python layout stays
+   large; the part editor never adds another vertical block beneath it. */
+.moss-preview-head { align-items: center; border-bottom: 1px solid #586f81; min-height: 42px; letter-spacing: 0; }
+.moss-tabs { display: flex; gap: 12px; }
+.moss-tab { background: transparent; border: 0; border-bottom: 3px solid transparent; padding: 8px 12px; color: var(--moss-muted) !important; font-size: 18px !important; white-space: nowrap; }
+.moss-tab[aria-selected=true] { color: var(--moss-accent) !important; border-bottom-color: var(--moss-accent); font-weight: 650; }
+.moss-preview-tag { text-align: right; font-size: 13px; }
+.moss-part-panel { flex: 1 0 auto; min-height: min-content; display: flex; flex-direction: column; gap: 10px; padding: 16px; border: 1px solid #586f81; border-radius: 8px; background: #1c2630; }
+.moss-part-row { display: flex; align-items: center; gap: 12px; }
+.moss-part-row label { font-size: 16px; color: var(--moss-muted); }
+.moss-part-count { font-size: 14px; color: var(--moss-accent); white-space: nowrap; }
+.moss-part-hint, .moss-part-note { font-size: 14px; line-height: 1.5; color: var(--moss-muted); }
+.moss-prompt-label { font-size: 16px; font-weight: 600; }
+.moss-part-input { width: 100%; flex: 1; min-height: 100px; resize: none; padding: 12px; border: 1px solid #687e92; border-radius: 6px; background: #101a23; font-size: 18px !important; line-height: 1.6 !important; }
+.moss-part-input:disabled { opacity: .72; }
+.moss-part-input::placeholder { color: #9bafbf; }
+.moss-part-input[aria-invalid=true] { border-color: #e8ca95; }
+.moss-part-bottom { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.moss-part-length { font-size: 13px; color: var(--moss-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.moss-part-invalid { color: #f2d39f; }
+.moss-style-status { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px; border: 1px solid var(--moss-accent); border-radius: 6px; color: var(--moss-accent); font-weight: 600; }
+.moss-clear-style { padding: 4px 12px; border: 1px solid #687e92; border-radius: 5px; background: #202934; cursor: pointer; }
+.moss-style-panel { flex: 1 0 auto; padding: 16px; border: 1px solid #586f81; border-radius: 8px; background: #1c2630; }
+.moss-style-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.moss-style-choice { display: flex; align-items: flex-start; gap: 10px; padding: 10px; border: 1px solid #586f81; border-radius: 6px; cursor: pointer; }
+.moss-style-selected { border-color: var(--moss-accent); background: #28413e; }
+.moss-style-choice input { margin: 4px 0 0; accent-color: var(--moss-accent); }
+.moss-style-choice strong, .moss-style-choice span span { display: block; }
+.moss-style-choice span span { margin-top: 3px; color: var(--moss-muted); font-size: 13px; line-height: 1.4; }
+@container (max-width: 480px) {
+  .moss-preview-head { flex-wrap: wrap; }
+  .moss-preview-tag { display: none; }
+  .moss-tab { padding: 8px; }
+  .moss-part-panel { padding: 10px; }
+  .moss-part-row { flex-wrap: wrap; gap: 6px; }
+  .moss-part-count { flex-basis: 100%; }
+  .moss-part-bottom { flex-wrap: wrap; }
+  .moss-style-choices { grid-template-columns: 1fr; }
+}
+
+.moss-baseline { position: absolute; left: 3%; right: 3%; height: 1px; background: #608a8425; pointer-events: none; }
+.moss-multi-reference .moss-cards { display: block; }
+.moss-multi-reference .moss-card-row { display: grid; gap: 8px; margin-bottom: 8px; }
+.moss-multi-reference .moss-head-row { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.moss-multi-reference .moss-body-row { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.moss-artwork > img { width: 100%; height: 100%; object-fit: contain; }
+.moss-reference-roles { border-top: 1px solid #394753; margin-top: 14px; padding-top: 12px; }
+.moss-reference-role-row { display: grid; grid-template-columns: minmax(150px, .8fr) minmax(0, 1.2fr); gap: 10px; align-items: center; margin: 9px 0; }
+.moss-reference-roles [data-reference-plan] { white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (max-width: 560px) {
+  .moss-multi-reference .moss-card-label { font-size: 10px; }
+  .moss-reference-role-row { grid-template-columns: 1fr; }
+}
+
+/* Individual output previews are separate canvases, with their real aspect ratios. */
+.moss-batch-stage { display: block; overflow: auto; padding: 10px; box-sizing: border-box; }
+.moss-output-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); align-items: start; gap: 12px; width: 100%; }
+.moss-output-gallery[hidden] { display: none; }
+.moss-output-card { display: flex; flex-direction: column; gap: 7px; min-width: 0; padding: 6px; border: 1px solid #586f81; border-radius: 5px; background: #1b2630; color: #dcecf7; text-align: left; cursor: pointer; }
+.moss-output-card[aria-pressed="true"] { border-color: #81efdb; box-shadow: 0 0 0 1px #81efdb; }
+.moss-output-title { font-size: 12px; line-height: 1.35; overflow-wrap: anywhere; }
+.moss-output-canvas { position: relative; background: white; width: 100%; flex: none; overflow: hidden; }
