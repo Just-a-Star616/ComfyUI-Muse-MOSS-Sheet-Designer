@@ -174,12 +174,12 @@ def _list_prompt(entry, state, profile, has_ref):
     return " ".join(s for s in (text, *details, keep) if s)
 
 
-def _contain(image, width, height, fill):
-    """Scale to fit inside width x height without cropping; pad with fill."""
+def _contain(image, width, height, fill, bottom=False):
+    """Scale to fit inside width x height without cropping; pad with fill (centred, or flush with the bottom edge)."""
     scale = min(width / image.shape[2], height / image.shape[1])
     w, h = max(1, round(image.shape[2] * scale)), max(1, round(image.shape[1] * scale))
     out = torch.full((1, height, width, 3), fill, device=image.device)
-    y, x = (height - h) // 2, (width - w) // 2
+    y, x = (height - h) if bottom else (height - h) // 2, (width - w) // 2
     out[:, y:y + h, x:x + w] = comfy.utils.common_upscale(image.movedim(-1, 1), w, h, "lanczos", "disabled").movedim(1, -1)
     return out
 
@@ -191,10 +191,6 @@ def _load_bg_model():
         raise RuntimeError("remove_background needs a model in models/background_removal (e.g. birefnet.safetensors).")
     name = next((f for f in files if "birefnet" in f.lower()), files[0])
     return comfy.bg_removal_model.load(folder_paths.get_full_path_or_raise("background_removal", name))
-
-
-def _fit(image, width, height):
-    return comfy.utils.common_upscale(image.movedim(-1, 1), width, height, "lanczos", "center").movedim(1, -1)
 
 
 def _align(image, mask, width, height, figure_height, bottom_margin):
@@ -225,7 +221,8 @@ def _on_white(entry):
 
 def _template(session):
     portrait = session.get("face_front")
-    panels = [_fit(_on_white(portrait)[0], *PORTRAIT_SIZE) if portrait else torch.ones((1, PORTRAIT_SIZE[1], PORTRAIT_SIZE[0], 3))]
+    # Bust portraits are wider than the tall panel: fit the whole image and sit its cut-off chest on the bottom edge.
+    panels = [_contain(_on_white(portrait)[0], *PORTRAIT_SIZE, 1.0, bottom=True) if portrait else torch.ones((1, PORTRAIT_SIZE[1], PORTRAIT_SIZE[0], 3))]
     for view in ("body_front", "body_left", "body_right", "body_back"):
         entry = session.get(view)
         panels.append(_align(*_on_white(entry), **BODY_PANEL) if entry else torch.ones((1, BODY_PANEL["height"], BODY_PANEL["width"], 3)))
