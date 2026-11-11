@@ -32,7 +32,7 @@
       "name": "front portrait",
       "kind": "portrait",
       "label": "character",
-      "caption": "A straight-on head-and-chest portrait of the character, cropped at the upper chest. The complete head silhouette fills the portrait area."
+      "caption": "A straight-on head-and-shoulders portrait of the character, cropped at the upper chest. The complete head silhouette fills the portrait area."
     },
     "face_left": {
       "name": "right-facing profile portrait",
