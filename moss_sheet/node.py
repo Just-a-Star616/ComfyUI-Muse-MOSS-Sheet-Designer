@@ -8,6 +8,7 @@ Muse 5-panel template and emits the outputs.
 single_canvas: one generation of the whole sheet from MOSS's natural-language
 caption (never the MOSS layout JSON, which FLUX.2 / Qwen do not understand).
 prompt_list: dataset run over one of the bundled prompt lists.
+image_edit: redraws character_image in the designer style plus view_control edits["image"], at the image's own aspect.
 """
 import hashlib
 import json
@@ -103,7 +104,7 @@ def _get_models(model, clip, vae, kv_cache, qwen21_cache, qwen21_cache_dtype):
     return {"model": model, "clip": clip, "vae": vae, "family": family}
 
 
-def _conditioning(models, prompt, refs):
+def _conditioning(models, prompt, refs, ref_megapixels):
     if models["family"] == "qwen_image21":
         out = _node("TextEncodeQwenImage21").execute(
             clip=models["clip"], prompt=prompt, negative_prompt="", vae=models["vae"], resolution=1024,
@@ -112,16 +113,17 @@ def _conditioning(models, prompt, refs):
         return out[0], out[1]
     positive = _node("CLIPTextEncode").encode(models["clip"], prompt)[0]
     negative = _node("ConditioningZeroOut").zero_out(positive)[0]
-    for img in refs:
-        scaled = _node("ImageScaleToTotalPixels").execute(image=img, upscale_method="lanczos", megapixels=1.0, resolution_steps=1)[0]
+    for img, mp in zip(refs, ref_megapixels):
+        scaled = _node("ImageScaleToTotalPixels").execute(image=img, upscale_method="lanczos", megapixels=mp, resolution_steps=1)[0]
         latent = _node("VAEEncodeTiled").encode(vae=models["vae"], pixels=scaled, **TILED_VAE)[0]
         positive = _node("ReferenceLatent").execute(conditioning=positive, latent=latent)[0]
         negative = _node("ReferenceLatent").execute(conditioning=negative, latent=latent)[0]
     return positive, negative
 
 
-def _generate(models, prompt, refs, width, height, seed, steps, cfg):
-    positive, negative = _conditioning(models, prompt, refs)
+def _generate(models, prompt, refs, width, height, seed, steps, cfg, ref_megapixels=None):
+    """ref_megapixels: encode size per reference (FLUX.2 / Flux3); default 1 MP each."""
+    positive, negative = _conditioning(models, prompt, refs, ref_megapixels or [1.0] * len(refs))
     channels = models["model"].get_model_object("latent_format").latent_channels
     ratio = models["vae"].spacial_compression_encode()
     latent = {"samples": torch.zeros([1, channels, height // ratio, width // ratio], device=comfy.model_management.intermediate_device())}
@@ -141,15 +143,17 @@ def _sentence(prefix, text):
 
 def _view_prompt(item, kind, state, profile, has_ref, pose_index=None):
     """profile: (character, outfit, body, nsfw). Flat-lay clothing shows only the outfit,
-    hand/foot close-ups skip the body description, nude details only reach an outfit-less (nude) sheet.
+    body and nude details only reach full-body views (nude details only on an outfit-less, nude sheet).
+    Portraits leave out body details, and with a reference the outfit text too: naming a figure, skirts or boots
+    makes the models widen the head-and-shoulders shot to show them, and the outfit already comes from image 1.
     pose_index: image number of the pose guide."""
     character, outfit, body, nsfw = profile
     caption = item["caption"].removeprefix(C["view_prefix_character"])
     details = (_sentence("Outfit: ", outfit),) if kind == "clothing" else (
         _sentence("Character details: " if has_ref else "The character: ", character),
-        _sentence("Body: ", body) if kind in ("portrait", "body") else "",
-        _sentence("Nude details: ", nsfw) if kind in ("portrait", "body") and not outfit.strip() else "",
-        _sentence("Outfit: ", outfit))
+        _sentence("Body: ", body) if kind == "body" else "",
+        _sentence("Nude details: ", nsfw) if kind == "body" and not outfit.strip() else "",
+        "" if has_ref and kind == "portrait" else _sentence("Outfit: ", outfit))
     tail = (C["styles"][state["style"]], f"Shown alone on {C['backgrounds'][state['background']]}.")
     if has_ref:
         keep = "Same face, hairstyle, skin tone and outfit unchanged." if item["label"] == "character" else "Same outfit design, colors and materials as image 1."
@@ -254,7 +258,8 @@ class MuseMossSheetDesigner:
     OUTPUT_NODE = True
     DESCRIPTION = ("MOSS character-sheet designer (views, part prompts, styles, layout) generating with FLUX.2 Klein, Qwen Image 2.1 or MOSS-Image. "
                    "per_view renders each view as a candidate card (confirm, re-roll, prompt, edit); Build final sheet assembles the MOSS sheet plus the Muse 5-panel template; "
-                   "single_canvas renders the whole sheet at once; prompt_list renders a bundled dataset prompt list to images/captions.")
+                   "single_canvas renders the whole sheet at once; prompt_list renders a bundled dataset prompt list to images/captions; "
+                   "image_edit restyles character_image (designer style + edit text) to images/captions.")
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -265,7 +270,7 @@ class MuseMossSheetDesigner:
                 "vae": ("VAE",),
                 "prompt": ("STRING", {"multiline": True, "default": "", "placeholder": "Character description: name/trigger, face, hair, eyes, skin, distinguishing features (required)", "tooltip": "Character description: name/trigger, face, hair, skin, distinguishing features. Outfit and body details have their own optional boxes. Saved with character presets."}),
                 "state_json": ("STRING", {"default": compact(DEFAULT), "multiline": True, "dynamicPrompts": False}),
-                "mode": (["per_view", "single_canvas", "prompt_list"], {"default": "per_view"}),
+                "mode": (["per_view", "single_canvas", "prompt_list", "image_edit"], {"default": "per_view"}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff, "control_after_generate": "fixed"}),
                 "steps": ("INT", {"default": 4, "min": 1, "max": 100, "tooltip": "Klein: 4. Qwen 2.1: 20-25, or 8 with the Lightning LoRA."}),
                 "cfg": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 30.0, "step": 0.1}),
@@ -288,6 +293,7 @@ class MuseMossSheetDesigner:
                 "character_image": ("IMAGE", {"tooltip": "Identity reference (image 1). Without it the sheet is plain text-to-image. Ignored for MOSS-Image models (text-to-image only)."}),
                 "detail_image": ("IMAGE", {"tooltip": "Optional outfit/detail reference (image 2)."}),
                 "vision_model": ("LC_VISION_MODEL", {"tooltip": "From LC Vision Loader. Used only when a describe_* toggle is on. Set keep_model_loaded off on the loader to free VRAM before sampling."}),
+                "pose_megapixels": ("FLOAT", {"default": 0.75, "min": 0.1, "max": 4.0, "step": 0.05, "tooltip": "FLUX.2 / Flux3: encode size of the pose_image panel reference. 0.75 fits all three references at a 1 MP output on 24 GB with Klein 9B; the other references stay at 1 MP."}),
                 "pose_image": ("IMAGE", {"tooltip": "Optional Muse 5-panel pose template (portrait, front, right-facing, left-facing, back), e.g. the grey mannequin sheet or this node's template output. per_view crops the matching panel as the last reference for portrait, front, left-side, right-side and back views."}),
             },
             "hidden": {"node_id": "UNIQUE_ID"},
@@ -304,7 +310,7 @@ class MuseMossSheetDesigner:
             return str(error)
 
     def run(self, model, clip, vae, prompt, state_json, mode, seed, steps, cfg, megapixels, kv_cache, view_control,
-            outfit="", body_details="", remove_background=True, prompt_list=None, qwen21_cache="auto", qwen21_cache_dtype="default", character_image=None, detail_image=None, pose_image=None, describe_character=False, describe_outfit=False, describe_body=False,
+            outfit="", body_details="", remove_background=True, prompt_list=None, qwen21_cache="auto", qwen21_cache_dtype="default", character_image=None, detail_image=None, pose_image=None, pose_megapixels=0.75, describe_character=False, describe_outfit=False, describe_body=False,
             vision_preset=MUSE_VISION_PRESET, nsfw_details="", vision_model=None, node_id=None):
         state = parse_state(state_json, MAX_RESOLUTION)
         fields = {"prompt": prompt, "outfit": outfit, "body_details": body_details}
@@ -359,9 +365,23 @@ class MuseMossSheetDesigner:
             for slot in [s for s in session if s.startswith("list:") and not s.startswith(f"list:{prompt_list}:")]:
                 del session[slot]
             previews = [nodes.PreviewImage().save_images(img)["ui"]["images"][0] for img in images]
-            return {"ui": {"moss_sheet_status": [status], "images": previews, "muse_described": [described]}, "result": (blocked, "\n".join(captions), blocked, images, captions, *passthrough)}
+            return {"ui": {"moss_sheet_status": [status], "images": previews, "muse_captions": captions, "muse_described": [described]}, "result": (blocked, "\n".join(captions), blocked, images, captions, *passthrough)}
 
         locked, seeds, edits, edit_seeds, overrides, action = _parse_control(view_control)
+        if mode == "image_edit":
+            if not refs:
+                raise ValueError("image_edit needs character_image (and a FLUX.2 / Qwen model).")
+            src = refs[0]
+            text = " ".join(s for s in ("Redraw image 1 with the same character, pose, framing, outfit and background.", C["styles"][state["style"]], edits.get("image", "")) if s)
+            aspect = src.shape[2] / src.shape[1]
+            gen_w, gen_h = _round32(math.sqrt(megapixels * 1e6 * aspect)), _round32(math.sqrt(megapixels * 1e6 / aspect))
+            key = _key(text, seed, gen_w, gen_h, model_key)
+            if session.get("edit:image", {}).get("key") != key:
+                print(f"[MuseMossSheetDesigner] image_edit (seed={seed}, {gen_w}x{gen_h})", flush=True)
+                session["edit:image"] = {"key": key, "image": _generate(models, text, [src], gen_w, gen_h, seed, steps, cfg)}
+            image = session["edit:image"]["image"]
+            preview = nodes.PreviewImage().save_images(image)["ui"]["images"]
+            return {"ui": {"moss_sheet_status": [status], "images": preview, "muse_captions": [text], "muse_described": [described]}, "result": (blocked, text, blocked, [image], [text], *passthrough)}
         # Views render as candidates; sheet/template only come out on "build" (the Build final sheet button).
         scope, build = action.get("type", "all"), action.get("type") == "build"
         bg_model = None
@@ -379,7 +399,7 @@ class MuseMossSheetDesigner:
                 aspect = min(max(aspect, 0.75), 1.33)
             gen_w, gen_h = _round32(math.sqrt(megapixels * 1e6 * aspect)), _round32(math.sqrt(megapixels * 1e6 / aspect))
             view_seed = seeds.get(view, seed + VIEWS.index(view))
-            base_key = _key(text, view_seed, gen_w, gen_h, model_key, _tensor_hash(pose) if pose is not None else None)
+            base_key = _key(text, view_seed, gen_w, gen_h, model_key, [_tensor_hash(pose), float(pose_megapixels)] if pose is not None else None)
             edit, edit_seed = edits.get(view, ""), edit_seeds.get(view, view_seed + 1)
             final_key = _key(base_key, edit, edit_seed, bool(remove_background), state["background"])
             entry = session.get(view)
@@ -388,7 +408,8 @@ class MuseMossSheetDesigner:
                 scope = "done" if scope == "next" else scope
                 if entry is None or entry["key"] != base_key:
                     print(f"[MuseMossSheetDesigner] generating {view} (seed={view_seed}, {gen_w}x{gen_h})", flush=True)
-                    entry = {"key": base_key, "raw": _generate(models, text, view_refs, gen_w, gen_h, view_seed, steps, cfg)}
+                    ref_mp = [1.0] * len(refs) + ([float(pose_megapixels)] if pose is not None else [])
+                    entry = {"key": base_key, "raw": _generate(models, text, view_refs, gen_w, gen_h, view_seed, steps, cfg, ref_mp)}
                 image, mask = entry["raw"], None
                 if edit:
                     print(f"[MuseMossSheetDesigner] editing {view}: {edit}", flush=True)
@@ -406,7 +427,7 @@ class MuseMossSheetDesigner:
                 continue
             sheet[:, y0:y1, x0:x1] = _contain(entry["image"], x1 - x0, y1 - y0, BACKGROUND_RGB[state["background"]]).to(sheet)
             card["image"] = nodes.PreviewImage().save_images(entry["image"])["ui"]["images"][0]
-        for view in [v for v in session if not v.startswith("list:") and v not in state["views"]]:
+        for view in [v for v in session if not v.startswith(("list:", "edit:")) and v not in state["views"]]:
             del session[view]
         ui = {"moss_sheet_status": [status], "muse_described": [described], "muse_views": [cards], "muse_built": [build]}
         if not build:

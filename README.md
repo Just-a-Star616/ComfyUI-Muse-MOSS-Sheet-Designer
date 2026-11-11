@@ -40,13 +40,14 @@ MOSS-Image is text-to-image only. The node ignores reference images for MOSS mod
 | Input | Use |
 |---|---|
 | `prompt` (shown as *character_description*) | Character description: name/trigger, face, hair, skin, distinguishing features. Required. |
-| `outfit` | Used on every view. The only character text on flat-lay clothing views. |
-| `body_details` | Build, proportions, figure. Used on portrait and full-body views only. |
-| `nsfw_details` | Nude-only details (nipples, pubic hair, genitals). Only used on prompt-list prompts flagged `nude`, and on the sheet when `outfit` is empty (a nude reference sheet). Never added to clothed views. |
+| `outfit` | Used on every view except portraits with a `character_image` (outfit words such as skirt or boots widen the shot; the reference carries the outfit there). The only character text on flat-lay clothing views. |
+| `body_details` | Build, proportions, figure. Used on full-body views only; on portraits it widens the head-and-shoulders shot. |
+| `nsfw_details` | Nude-only details (nipples, pubic hair, genitals). Only used on prompt-list prompts flagged `nude`, and on full-body sheet views when `outfit` is empty (a nude reference sheet). Never added to clothed views. |
 | `character_image` | Identity reference (image 1). Without it the sheet is text-to-image. |
 | `detail_image` | Optional second reference (image 2), e.g. a face close-up or outfit detail. |
-| `pose_image` | Optional Muse 5-panel pose sheet (portrait, front, facing right, facing left, back), such as a grey mannequin sheet or this node's `template` output. The matching panel is cropped as the pose reference for those five views. |
-| `mode` | `per_view`, `single_canvas` or `prompt_list` (below). |
+| `pose_image` | Optional Muse 5-panel pose sheet (portrait, front, facing right, facing left, back), such as `pose_templates/Female Template.png` / `Male Template.png` (copy into ComfyUI's `input` folder) or this node's `template` output. The matching panel is cropped as the pose reference for those five views. |
+| `pose_megapixels` | FLUX.2 / Flux3: encode size of the `pose_image` panel reference (default 0.75). The other references are always encoded at 1 MP. |
+| `mode` | `per_view`, `single_canvas`, `prompt_list` or `image_edit` (below). |
 | `megapixels` | Generation size per view in `per_view`. |
 | `remove_background` | `per_view`: remove each view's background before assembly. Keep on for poses and the template. |
 | `describe_*`, `vision_preset`, `vision_model` | Auto-fill the three text boxes with LC Vision (below). |
@@ -75,6 +76,8 @@ This node calls LC Vision itself because the round trip node → LC Vision → n
 - `character_image` / `detail_image`: the input images passed through unchanged (blocked when not connected).
 
 **`single_canvas`** renders the whole sheet in one image from MOSS's natural-language caption. It is faster, but panel count and orientation are less reliable.
+
+**`image_edit`** redraws `character_image` in the designer's Style, keeping character, pose, framing and background, at the image's own aspect and `megapixels`. Extra instructions go in `view_control` as `{"edits": {"image": "..."}}`. Output goes to `images` / `captions`. Used by [Kons Character Curator](https://github.com/Just-a-Star616/ComfyUI-Kons-Character-Curator), a separate app that catalogues characters and datasets and generates through this node, to restyle dataset images.
 
 **`prompt_list`** renders one bundled dataset list to the `images` and `captions` list outputs (for SaveImageKJ or similar), at the list's resolution.
 
@@ -126,7 +129,7 @@ Edit the file to add lists or fix flags; restart ComfyUI to load changes. The R-
 
 ## Notes
 
-- Klein 9B with all three references at 1 MP ran out of memory on a 24 GB GPU. Qwen 2.1 handles three references at about 2.2× the time per view. One reference is the recommended default.
+- Klein 9B with all three references at 1 MP ran out of memory on a 24 GB GPU; with `pose_megapixels` at 0.75 (the default) all three fit at a 1 MP output. Qwen 2.1 handles three references at about 2.2× the time per view. One reference is the recommended default.
 - VAE encode and decode are tiled (512/64), which avoids GPU page faults on ROCm.
 
 ## License
