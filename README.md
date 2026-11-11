@@ -45,7 +45,7 @@ MOSS-Image is text-to-image only. The node ignores reference images for MOSS mod
 | `nsfw_details` | Nude-only details (nipples, pubic hair, genitals). Only used on prompt-list prompts flagged `nude`, and on the sheet when `outfit` is empty (a nude reference sheet). Never added to clothed views. |
 | `character_image` | Identity reference (image 1). Without it the sheet is text-to-image. |
 | `detail_image` | Optional second reference (image 2), e.g. a face close-up or outfit detail. |
-| `pose_image` | Optional Muse 5-panel pose sheet (portrait, front, facing right, facing left, back), such as a grey mannequin sheet or this node's `template` output. The matching panel is cropped as the pose reference for those five views. |
+| `pose_image` | Optional Muse 5-panel pose sheet (portrait, front, facing right, facing left, back), such as `pose_templates/Female Template.png` / `Male Template.png` (copy into ComfyUI's `input` folder) or this node's `template` output. The matching panel is cropped as the pose reference for those five views. |
 | `mode` | `per_view`, `single_canvas`, `prompt_list` or `image_edit` (below). |
 | `megapixels` | Generation size per view in `per_view`. |
 | `remove_background` | `per_view`: remove each view's background before assembly. Keep on for poses and the template. |
