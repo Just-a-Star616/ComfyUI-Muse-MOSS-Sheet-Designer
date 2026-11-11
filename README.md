@@ -46,6 +46,7 @@ MOSS-Image is text-to-image only. The node ignores reference images for MOSS mod
 | `character_image` | Identity reference (image 1). Without it the sheet is text-to-image. |
 | `detail_image` | Optional second reference (image 2), e.g. a face close-up or outfit detail. |
 | `pose_image` | Optional Muse 5-panel pose sheet (portrait, front, facing right, facing left, back), such as `pose_templates/Female Template.png` / `Male Template.png` (copy into ComfyUI's `input` folder) or this node's `template` output. The matching panel is cropped as the pose reference for those five views. |
+| `pose_megapixels` | FLUX.2 / Flux3: encode size of the `pose_image` panel reference (default 0.75). The other references are always encoded at 1 MP. |
 | `mode` | `per_view`, `single_canvas`, `prompt_list` or `image_edit` (below). |
 | `megapixels` | Generation size per view in `per_view`. |
 | `remove_background` | `per_view`: remove each view's background before assembly. Keep on for poses and the template. |
@@ -128,7 +129,7 @@ Edit the file to add lists or fix flags; restart ComfyUI to load changes. The R-
 
 ## Notes
 
-- Klein 9B with all three references at 1 MP ran out of memory on a 24 GB GPU. Qwen 2.1 handles three references at about 2.2× the time per view. One reference is the recommended default.
+- Klein 9B with all three references at 1 MP ran out of memory on a 24 GB GPU; with `pose_megapixels` at 0.75 (the default) all three fit at a 1 MP output. Qwen 2.1 handles three references at about 2.2× the time per view. One reference is the recommended default.
 - VAE encode and decode are tiled (512/64), which avoids GPU page faults on ROCm.
 
 ## License
