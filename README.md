@@ -77,7 +77,7 @@ This node calls LC Vision itself because the round trip node → LC Vision → n
 
 **`single_canvas`** renders the whole sheet in one image from MOSS's natural-language caption. It is faster, but panel count and orientation are less reliable.
 
-**`image_edit`** redraws `character_image` in the designer's Style, keeping character, pose, framing and background, at the image's own aspect and `megapixels`. Extra instructions go in `view_control` as `{"edits": {"image": "..."}}`. Output goes to `images` / `captions`. Used by Muse Catalogue to restyle dataset images.
+**`image_edit`** redraws `character_image` in the designer's Style, keeping character, pose, framing and background, at the image's own aspect and `megapixels`. Extra instructions go in `view_control` as `{"edits": {"image": "..."}}`. Output goes to `images` / `captions`. Used by [Kons Character Curator](https://github.com/Just-a-Star616/ComfyUI-Kons-Character-Curator), a separate app that catalogues characters and datasets and generates through this node, to restyle dataset images.
 
 **`prompt_list`** renders one bundled dataset list to the `images` and `captions` list outputs (for SaveImageKJ or similar), at the list's resolution.
 
