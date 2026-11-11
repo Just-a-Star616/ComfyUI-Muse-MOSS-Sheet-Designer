@@ -8,6 +8,7 @@ Muse 5-panel template and emits the outputs.
 single_canvas: one generation of the whole sheet from MOSS's natural-language
 caption (never the MOSS layout JSON, which FLUX.2 / Qwen do not understand).
 prompt_list: dataset run over one of the bundled prompt lists.
+image_edit: redraws character_image in the designer style plus view_control edits["image"], at the image's own aspect.
 """
 import hashlib
 import json
@@ -254,7 +255,8 @@ class MuseMossSheetDesigner:
     OUTPUT_NODE = True
     DESCRIPTION = ("MOSS character-sheet designer (views, part prompts, styles, layout) generating with FLUX.2 Klein, Qwen Image 2.1 or MOSS-Image. "
                    "per_view renders each view as a candidate card (confirm, re-roll, prompt, edit); Build final sheet assembles the MOSS sheet plus the Muse 5-panel template; "
-                   "single_canvas renders the whole sheet at once; prompt_list renders a bundled dataset prompt list to images/captions.")
+                   "single_canvas renders the whole sheet at once; prompt_list renders a bundled dataset prompt list to images/captions; "
+                   "image_edit restyles character_image (designer style + edit text) to images/captions.")
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -265,7 +267,7 @@ class MuseMossSheetDesigner:
                 "vae": ("VAE",),
                 "prompt": ("STRING", {"multiline": True, "default": "", "placeholder": "Character description: name/trigger, face, hair, eyes, skin, distinguishing features (required)", "tooltip": "Character description: name/trigger, face, hair, skin, distinguishing features. Outfit and body details have their own optional boxes. Saved with character presets."}),
                 "state_json": ("STRING", {"default": compact(DEFAULT), "multiline": True, "dynamicPrompts": False}),
-                "mode": (["per_view", "single_canvas", "prompt_list"], {"default": "per_view"}),
+                "mode": (["per_view", "single_canvas", "prompt_list", "image_edit"], {"default": "per_view"}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff, "control_after_generate": "fixed"}),
                 "steps": ("INT", {"default": 4, "min": 1, "max": 100, "tooltip": "Klein: 4. Qwen 2.1: 20-25, or 8 with the Lightning LoRA."}),
                 "cfg": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 30.0, "step": 0.1}),
@@ -359,9 +361,23 @@ class MuseMossSheetDesigner:
             for slot in [s for s in session if s.startswith("list:") and not s.startswith(f"list:{prompt_list}:")]:
                 del session[slot]
             previews = [nodes.PreviewImage().save_images(img)["ui"]["images"][0] for img in images]
-            return {"ui": {"moss_sheet_status": [status], "images": previews, "muse_described": [described]}, "result": (blocked, "\n".join(captions), blocked, images, captions, *passthrough)}
+            return {"ui": {"moss_sheet_status": [status], "images": previews, "muse_captions": captions, "muse_described": [described]}, "result": (blocked, "\n".join(captions), blocked, images, captions, *passthrough)}
 
         locked, seeds, edits, edit_seeds, overrides, action = _parse_control(view_control)
+        if mode == "image_edit":
+            if not refs:
+                raise ValueError("image_edit needs character_image (and a FLUX.2 / Qwen model).")
+            src = refs[0]
+            text = " ".join(s for s in ("Redraw image 1 with the same character, pose, framing, outfit and background.", C["styles"][state["style"]], edits.get("image", "")) if s)
+            aspect = src.shape[2] / src.shape[1]
+            gen_w, gen_h = _round32(math.sqrt(megapixels * 1e6 * aspect)), _round32(math.sqrt(megapixels * 1e6 / aspect))
+            key = _key(text, seed, gen_w, gen_h, model_key)
+            if session.get("edit:image", {}).get("key") != key:
+                print(f"[MuseMossSheetDesigner] image_edit (seed={seed}, {gen_w}x{gen_h})", flush=True)
+                session["edit:image"] = {"key": key, "image": _generate(models, text, [src], gen_w, gen_h, seed, steps, cfg)}
+            image = session["edit:image"]["image"]
+            preview = nodes.PreviewImage().save_images(image)["ui"]["images"]
+            return {"ui": {"moss_sheet_status": [status], "images": preview, "muse_captions": [text], "muse_described": [described]}, "result": (blocked, text, blocked, [image], [text], *passthrough)}
         # Views render as candidates; sheet/template only come out on "build" (the Build final sheet button).
         scope, build = action.get("type", "all"), action.get("type") == "build"
         bg_model = None
@@ -406,7 +422,7 @@ class MuseMossSheetDesigner:
                 continue
             sheet[:, y0:y1, x0:x1] = _contain(entry["image"], x1 - x0, y1 - y0, BACKGROUND_RGB[state["background"]]).to(sheet)
             card["image"] = nodes.PreviewImage().save_images(entry["image"])["ui"]["images"][0]
-        for view in [v for v in session if not v.startswith("list:") and v not in state["views"]]:
+        for view in [v for v in session if not v.startswith(("list:", "edit:")) and v not in state["views"]]:
             del session[view]
         ui = {"moss_sheet_status": [status], "muse_described": [described], "muse_views": [cards], "muse_built": [build]}
         if not build:

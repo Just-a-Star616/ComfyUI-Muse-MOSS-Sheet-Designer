@@ -46,7 +46,7 @@ MOSS-Image is text-to-image only. The node ignores reference images for MOSS mod
 | `character_image` | Identity reference (image 1). Without it the sheet is text-to-image. |
 | `detail_image` | Optional second reference (image 2), e.g. a face close-up or outfit detail. |
 | `pose_image` | Optional Muse 5-panel pose sheet (portrait, front, facing right, facing left, back), such as a grey mannequin sheet or this node's `template` output. The matching panel is cropped as the pose reference for those five views. |
-| `mode` | `per_view`, `single_canvas` or `prompt_list` (below). |
+| `mode` | `per_view`, `single_canvas`, `prompt_list` or `image_edit` (below). |
 | `megapixels` | Generation size per view in `per_view`. |
 | `remove_background` | `per_view`: remove each view's background before assembly. Keep on for poses and the template. |
 | `describe_*`, `vision_preset`, `vision_model` | Auto-fill the three text boxes with LC Vision (below). |
@@ -75,6 +75,8 @@ This node calls LC Vision itself because the round trip node → LC Vision → n
 - `character_image` / `detail_image`: the input images passed through unchanged (blocked when not connected).
 
 **`single_canvas`** renders the whole sheet in one image from MOSS's natural-language caption. It is faster, but panel count and orientation are less reliable.
+
+**`image_edit`** redraws `character_image` in the designer's Style, keeping character, pose, framing and background, at the image's own aspect and `megapixels`. Extra instructions go in `view_control` as `{"edits": {"image": "..."}}`. Output goes to `images` / `captions`. Used by Muse Catalogue to restyle dataset images.
 
 **`prompt_list`** renders one bundled dataset list to the `images` and `captions` list outputs (for SaveImageKJ or similar), at the list's resolution.
 
