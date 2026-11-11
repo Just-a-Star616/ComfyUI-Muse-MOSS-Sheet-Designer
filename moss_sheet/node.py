@@ -144,6 +144,8 @@ def _sentence(prefix, text):
 def _view_prompt(item, kind, state, profile, has_ref, pose_index=None):
     """profile: (character, outfit, body, nsfw). Flat-lay clothing shows only the outfit,
     hand/foot close-ups skip the body description, nude details only reach an outfit-less (nude) sheet.
+    Portraits with a reference leave the outfit text out: naming skirts or boots makes the models widen the
+    shot to show them, and the outfit already comes from image 1.
     pose_index: image number of the pose guide."""
     character, outfit, body, nsfw = profile
     caption = item["caption"].removeprefix(C["view_prefix_character"])
@@ -151,7 +153,7 @@ def _view_prompt(item, kind, state, profile, has_ref, pose_index=None):
         _sentence("Character details: " if has_ref else "The character: ", character),
         _sentence("Body: ", body) if kind in ("portrait", "body") else "",
         _sentence("Nude details: ", nsfw) if kind in ("portrait", "body") and not outfit.strip() else "",
-        _sentence("Outfit: ", outfit))
+        "" if has_ref and kind == "portrait" else _sentence("Outfit: ", outfit))
     tail = (C["styles"][state["style"]], f"Shown alone on {C['backgrounds'][state['background']]}.")
     if has_ref:
         keep = "Same face, hairstyle, skin tone and outfit unchanged." if item["label"] == "character" else "Same outfit design, colors and materials as image 1."

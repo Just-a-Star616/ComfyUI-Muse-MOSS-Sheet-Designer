@@ -40,7 +40,7 @@ MOSS-Image is text-to-image only. The node ignores reference images for MOSS mod
 | Input | Use |
 |---|---|
 | `prompt` (shown as *character_description*) | Character description: name/trigger, face, hair, skin, distinguishing features. Required. |
-| `outfit` | Used on every view. The only character text on flat-lay clothing views. |
+| `outfit` | Used on every view except portraits with a `character_image` (outfit words such as skirt or boots widen the shot; the reference carries the outfit there). The only character text on flat-lay clothing views. |
 | `body_details` | Build, proportions, figure. Used on portrait and full-body views only. |
 | `nsfw_details` | Nude-only details (nipples, pubic hair, genitals). Only used on prompt-list prompts flagged `nude`, and on the sheet when `outfit` is empty (a nude reference sheet). Never added to clothed views. |
 | `character_image` | Identity reference (image 1). Without it the sheet is text-to-image. |
