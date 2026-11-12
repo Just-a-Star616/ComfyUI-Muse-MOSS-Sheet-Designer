@@ -486,8 +486,8 @@
    {
     "text": "A close-up beauty photograph of her face and bare shoulders, camera at eye level. She faces the camera with her lips softly parted and her eyes on the lens. Dramatic side light, plain dark background.",
     "outfit": false,
-    "body": true,
-    "nude": true
+    "body": false,
+    "nude": false
    },
    {
     "text": "A full-body photograph, camera at her eye level. She kneels on a bed, sitting upright with her hands on her thighs, facing the camera. Soft bedroom light.",
