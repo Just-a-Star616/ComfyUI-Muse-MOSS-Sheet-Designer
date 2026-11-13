@@ -78,8 +78,8 @@ const btn = (label, title, color, onclick, extra = '') => el('button', {textCont
 // Describe fills the boxes only; every other button sets view_control.action and queues.
 // Runs in per_view only preview the views; nothing is output until Build final sheet.
 function generateBar(node, queueAction) {
-  const describe = btn('🔍 Describe', 'Fill the text boxes from the reference image(s) with LC Vision, without generating. Uses the ticked describe_* toggles, or all three if none are ticked.', '#444', () => {
-    const toggles = ['describe_character', 'describe_outfit', 'describe_body'];
+  const describe = btn('🔍 Describe', 'Fill the text boxes from the reference image(s) with LC Vision, without generating. Uses the ticked describe_* toggles, or all of them if none are ticked.', '#444', () => {
+    const toggles = ['describe_character', 'describe_outfit', 'describe_body', 'describe_parts'];
     if (!toggles.some(t => getWidget(node, t))) toggles.forEach(t => setWidget(node, t, true));
     app.queuePrompt(0, 1);
   }, 'flex:1;');
@@ -191,7 +191,7 @@ app.registerExtension({
     node.addDOMWidget('muse_views', 'MUSE_VIEWS', panel.root, {serialize: false, getMinHeight: () => panel.root.scrollHeight + 8});
     requestAnimationFrame(() => panel.render());
     // LC Vision answers come back per box: show them in the box (editable) and switch that toggle off.
-    const TOGGLES = {prompt: 'describe_character', outfit: 'describe_outfit', body_details: 'describe_body'};
+    const TOGGLES = {prompt: 'describe_character', outfit: 'describe_outfit', body_details: 'describe_body', part_prompts: 'describe_parts'};
     const prior = node.onExecuted;
     node.onExecuted = function (message) {
       const result = prior?.apply(this, arguments);
@@ -200,7 +200,12 @@ app.registerExtension({
         panel.render(true);
       }
       for (const [field, text] of Object.entries(message?.muse_described?.[0] ?? {})) {
-        setWidget(node, field, text);
+        if (field === 'part_prompts') {
+          // Parts the model saw get replaced; parts it left empty (hidden in the reference) keep their text.
+          let state = {};
+          try { state = JSON.parse(getWidget(node, 'state_json')); } catch { /* unreadable state: only the parts get written */ }
+          setWidget(node, 'state_json', JSON.stringify({...state, part_prompts: {...state.part_prompts, ...text}}));
+        } else setWidget(node, field, text);
         setWidget(node, TOGGLES[field], false);
       }
       return result;

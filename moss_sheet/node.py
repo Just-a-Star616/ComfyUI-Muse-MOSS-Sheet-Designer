@@ -13,6 +13,7 @@ image_edit: redraws character_image in the designer style plus view_control edit
 import hashlib
 import json
 import math
+import re
 from pathlib import Path
 
 import torch
@@ -25,7 +26,7 @@ import nodes
 from comfy_execution.graph import ExecutionBlocker
 from nodes import MAX_RESOLUTION
 
-from .catalog import CONTRACT as C, DEFAULT, VIEWS
+from .catalog import CONTRACT as C, DEFAULT, PARTS, VIEWS
 from .compiler import compile_state, render_prompt
 from .layout import compute_layout
 from .state import StateError, compact, parse_state, validate_prompt
@@ -48,6 +49,29 @@ VISION_FIELDS = {
     "outfit": ("describe_outfit", "Describe only the clothing and accessories this character wears as compact comma-separated visual facts: each garment, colours, materials, trims, ribbons, sleeves, gloves, jewellery, headwear. Leave out footwear, body, pose and background."),
     "body_details": ("describe_body", "Describe only this character's body build and proportions as compact comma-separated visual facts: overall build, height impression, shoulders, chest size, waist, hips, legs. No clothing, face, hair, pose or background, and no details only visible when nude."),
 }
+# describe_parts: one request answers every designer part prompt as JSON. Part prompts only reach the views where that part is
+# visible, while the three boxes reach every view, so with it on the boxes get a brief overall impression and the specifics go to the parts.
+VISION_PARTS = (
+    "You split a character's visible details into part prompts for a character-sheet generator. Each part prompt is only used in the views "
+    "where that part can be seen, so put every detail in the one part where it is physically located:\n"
+    "- head_hair: hairstyle structure, bangs, parting, braids, ties, hair accessories, headwear, ears, horns.\n"
+    "- face: eye colour and shape, brows, makeup, freckles, scars, facial markings, facial piercings, eyewear.\n"
+    "- upper_clothing: front of torso, neck and arms: collar, neckline, closures, chest emblems, sleeves, shoulder pieces, necklaces.\n"
+    "- back_clothing: only what is on the back: back print, cape, hood, back zipper or lacing, wings, slung weapon, tail. Empty if the back is plain or not shown.\n"
+    "- lower_body: skirt or trousers, belt, pouches, holsters, hem, legwear, thigh straps.\n"
+    "- hands: gloves, bracers, rings, nails, anything held.\n"
+    "- footwear: shoes or boots, socks, height, laces, soles, colours.\n"
+    "- other: visible details that fit no part above, such as tattoos spanning several regions or floating items.\n"
+    "Rules: compact comma-separated visual facts with materials, trims, patterns, closures and colour placement; no sentences, pose, lighting, "
+    "background or art style. Each detail in exactly one part. For one-sided features name the character's own side, which is the opposite "
+    "of the image side (an earring on the left of the image is on her RIGHT ear). Describe only what is visible; use \"\" for a part that is "
+    "hidden or not shown, and never invent the back from the front. Never mention what is absent (no \"no necklace\", \"none visible\"). At most 60 words per part.\n"
+    'Output only this JSON, no code fence, nothing after it: {"head_hair":"","face":"","upper_clothing":"","back_clothing":"","lower_body":"","hands":"","footwear":"","other":""}')
+VISION_BRIEF = {
+    "prompt": "Describe only this character's overall identity in 10 to 25 words as comma-separated visual facts: species, apparent adult age, overall impression, hair colour and rough length, skin tone. No eye, face or hairstyle details, no clothing, pose or background.",
+    "outfit": "Describe only this character's outfit in one line of 10 to 25 words: garment types and the main colour scheme, e.g. dark red military coat over a black bodysuit, gold trim. No trims, patterns, closures, accessories, footwear, body, pose or background.",
+    "body_details": "Describe only this character's body build and proportions in 8 to 20 words as comma-separated visual facts: height impression, build, shoulders, chest, waist, hips, legs. No clothing, face, hair, pose or background, and no details only visible when nude.",
+}
 MUSE_VISION_PRESET = "Muse (per field)"
 VISION_STYLE_TAG = {"none": "None", "anime": "Anime", "photo": "Realistic", "realistic_painting": "Realistic", "semi_realistic_anime": "Anime",
                     "oil_painting": "Illustration", "watercolor": "Illustration", "gouache": "Illustration", "colored_pencil": "Illustration", "3d": "Cartoon"}
@@ -60,7 +84,7 @@ def _vision_presets():
     return [MUSE_VISION_PRESET] + ([p for p in lc.INPUT_TYPES()["required"]["preset"][0] if p != "Custom"] if lc else [])
 
 
-def _describe(vision_model, preset, instruction, notes, style, images, seed, keep_notes):
+def _describe(vision_model, preset, instruction, notes, style, images, seed, keep_notes, max_tokens=400):
     """keep_notes: put the user's existing text (name/trigger) in front of the answer verbatim."""
     muse = preset == MUSE_VISION_PRESET
     lc_preset, system = ("Custom", instruction) if muse else (preset, "")
@@ -68,9 +92,25 @@ def _describe(vision_model, preset, instruction, notes, style, images, seed, kee
     if notes.strip():
         text += f"\nKeep these user notes where they fit: {notes.strip()}"
     answer = _node("LCVisionPromptEnhancer").run(vision_model=vision_model, prompt_text=text, preset=lc_preset, custom_system_prompt=system,
-                                               style_tag="None" if muse else VISION_STYLE_TAG[style], max_tokens=400, temperature=0.3, top_p=0.9,
+                                               style_tag="None" if muse else VISION_STYLE_TAG[style], max_tokens=max_tokens, temperature=0.3, top_p=0.9,
                                                repetition_penalty=1.1, seed=int(seed) % 2**31, image_1=images[0], image_2=images[1])[0].strip()
     return f"{notes.strip().rstrip(',.')}, {answer}" if keep_notes and notes.strip() else answer
+
+
+def _parse_parts(answer):
+    """LC Vision's JSON answer -> non-empty part prompts. Tolerates text around the object and a {"part_prompts": {...}} wrapper."""
+    try:
+        data = json.loads(answer[answer.index("{"):answer.rindex("}") + 1])
+    except ValueError:
+        data = None
+    if isinstance(data, dict) and isinstance(data.get("part_prompts"), dict):
+        data = data["part_prompts"]
+    if not isinstance(data, dict):
+        raise ValueError(f"describe_parts: LC Vision did not answer with JSON: {answer[:300]}")
+    parts = {k: ", ".join(map(str, v)) if isinstance(v, list) else str(v) for k, v in data.items() if k in PARTS}
+    parts = {k: v.strip().strip(",. ")[:1000] for k, v in parts.items()}
+    # Small models answer "none visible" instead of "": that would be drawn as text in those views.
+    return {k: v for k, v in parts.items() if v and not re.fullmatch(r"(none|nothing|n/?a|not (visible|shown)|hidden)( visible| shown)?", v, re.I)}
 
 
 def _pose_crop(pose_image, view):
@@ -288,6 +328,7 @@ class MuseMossSheetDesigner:
                 "describe_character": ("BOOLEAN", {"default": False, "tooltip": "Fill character_description from character_image (+ detail_image) with LC Vision (needs vision_model). Describe-only run: fills the box and switches itself off; queue again to generate."}),
                 "describe_outfit": ("BOOLEAN", {"default": False, "tooltip": "Fill outfit from the reference image(s) with LC Vision. Describe-only run: fills the box and switches itself off; queue again to generate."}),
                 "describe_body": ("BOOLEAN", {"default": False, "tooltip": "Fill body_details from the reference image(s) with LC Vision. Describe-only run: fills the box and switches itself off; queue again to generate."}),
+                "describe_parts": ("BOOLEAN", {"default": False, "tooltip": "Fill the designer part prompts (head/hair, face, upper, back, lower, hands, footwear, other) from the reference image(s) with LC Vision; each part is only used in views where it is visible. With Muse (per field), boxes described in the same run get a brief overall description so the specifics live in the parts. Describe-only run."}),
                 "vision_preset": (_vision_presets(), {"default": MUSE_VISION_PRESET, "tooltip": "Muse (per field) asks for just that box's facts (no style text). Any other choice uses that LC Vision preset for every toggled box, with style_tag from the designer's Style. Text already in character_description (name/trigger) is kept in front."}),
                 "nsfw_details": ("STRING", {"multiline": True, "default": "", "placeholder": "Nude-only details (optional): nipples, pubic hair, genitals... Used only on nude prompt-list prompts, or on the sheet when outfit is empty.", "tooltip": "Details that are only visible nude. Never added to clothed views. Saved with character presets."}),
                 "character_image": ("IMAGE", {"tooltip": "Identity reference (image 1). Without it the sheet is plain text-to-image. Ignored for MOSS-Image models (text-to-image only)."}),
@@ -310,23 +351,27 @@ class MuseMossSheetDesigner:
             return str(error)
 
     def run(self, model, clip, vae, prompt, state_json, mode, seed, steps, cfg, megapixels, kv_cache, view_control,
-            outfit="", body_details="", remove_background=True, prompt_list=None, qwen21_cache="auto", qwen21_cache_dtype="default", character_image=None, detail_image=None, pose_image=None, pose_megapixels=0.75, describe_character=False, describe_outfit=False, describe_body=False,
+            outfit="", body_details="", remove_background=True, prompt_list=None, qwen21_cache="auto", qwen21_cache_dtype="default", character_image=None, detail_image=None, pose_image=None, pose_megapixels=0.75, describe_character=False, describe_outfit=False, describe_body=False, describe_parts=False,
             vision_preset=MUSE_VISION_PRESET, nsfw_details="", vision_model=None, node_id=None):
         state = parse_state(state_json, MAX_RESOLUTION)
         fields = {"prompt": prompt, "outfit": outfit, "body_details": body_details}
         toggles = {"describe_character": describe_character, "describe_outfit": describe_outfit, "describe_body": describe_body}
         described = {}
         wanted = [f for f, (toggle, _) in VISION_FIELDS.items() if toggles[toggle]]
-        if wanted:
+        if wanted or describe_parts:
             if vision_model is None or character_image is None:
                 raise ValueError("describe_* toggles need vision_model (LC Vision Loader) and character_image connected.")
             images = (character_image[:1], detail_image[:1] if detail_image is not None else None)
             for f in wanted:
                 print(f"[MuseMossSheetDesigner] LC Vision -> {f}", flush=True)
-                described[f] = _describe(vision_model, vision_preset, VISION_FIELDS[f][1], fields[f], state["style"], images, seed, f == "prompt")
+                brief = describe_parts and vision_preset == MUSE_VISION_PRESET
+                described[f] = _describe(vision_model, vision_preset, (VISION_BRIEF if brief else {f: VISION_FIELDS[f][1]})[f], fields[f], state["style"], images, seed, f == "prompt")
+            if describe_parts:
+                print("[MuseMossSheetDesigner] LC Vision -> part_prompts", flush=True)
+                described["part_prompts"] = _parse_parts(_describe(vision_model, MUSE_VISION_PRESET, VISION_PARTS, "", state["style"], images, seed, False, max_tokens=900))
             # Describe-only run: the boxes get filled for review/editing; nothing is generated until the next queue.
             blocked = ExecutionBlocker(None)
-            return {"ui": {"muse_described": [described]}, "result": (blocked, "\n\n".join(f"[{f}] {t}" for f, t in described.items()), blocked, [blocked], [blocked], blocked, blocked)}
+            return {"ui": {"muse_described": [described]}, "result": (blocked, "\n\n".join(f"[{f}] {t if isinstance(t, str) else json.dumps(t)}" for f, t in described.items()), blocked, [blocked], [blocked], blocked, blocked)}
         nude = () if outfit.strip() else (nsfw_details,)
         state["character"] = {"identity": " ".join(t.strip() for t in (prompt, body_details, *nude) if t.strip()), "outfit": outfit.strip()}
         layout = compute_layout(state, MAX_RESOLUTION)

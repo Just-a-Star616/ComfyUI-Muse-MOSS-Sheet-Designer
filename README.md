@@ -50,19 +50,21 @@ MOSS-Image is text-to-image only. The node ignores reference images for MOSS mod
 | `mode` | `per_view`, `single_canvas`, `prompt_list` or `image_edit` (below). |
 | `megapixels` | Generation size per view in `per_view`. |
 | `remove_background` | `per_view`: remove each view's background before assembly. Keep on for poses and the template. |
-| `describe_*`, `vision_preset`, `vision_model` | Auto-fill the three text boxes with LC Vision (below). |
+| `describe_*`, `vision_preset`, `vision_model` | Auto-fill the three text boxes and the part prompts with LC Vision (below). |
 
 Designer settings (views, part prompts, style, background, layout) are stored in `state_json` and edited through the card UI on the node.
 
 ## Auto-fill text boxes with LC Vision
 
-Requires ComfyUI_LC_Vision_nodes. Connect an **LC Vision Loader** to `vision_model`, then switch on `describe_character`, `describe_outfit` and/or `describe_body`.
+Requires ComfyUI_LC_Vision_nodes. Connect an **LC Vision Loader** to `vision_model`, then switch on `describe_character`, `describe_outfit`, `describe_body` and/or `describe_parts`.
 
 - On queue, each toggled box sends `character_image` (and `detail_image`, if connected) to LC Vision with an instruction for just that box. Any text already in the box is passed along as notes to keep.
 - That run only describes: answers are written into their boxes and the toggles switch off. Nothing is generated. Review and edit the text (vision models can invent details, such as pointed ears), then press Next view or All views.
 - `vision_preset`: **Muse (per field)** asks only for that box's facts. Any other LC preset (for example Character Anchor) is used for every toggled box.
 - LC Vision's `style_tag` follows the designer's Style for LC presets; Muse (per field) asks for facts only, with no style text.
 - Text already in character_description (name or trigger word) is kept verbatim in front of the answer.
+- `describe_parts` fills the designer part prompts (head/hair, face, upper garment, back, lower body, hands, footwear, other) in one request. Each part prompt is only used in views where that part is visible, so back details stay off the front views. Parts the model leaves empty (hidden in the reference) keep their current text.
+- With `describe_parts` and **Muse (per field)**, the boxes described in the same run get a brief overall description (identity, build, garment types and colours) and the specifics go to the parts. Toggle all four for a full split.
 - Set `keep_model_loaded` off on the loader so the vision model leaves VRAM before sampling.
 
 This node calls LC Vision itself because the round trip node → LC Vision → node would be a loop, which ComfyUI cannot run. For a separate captioning branch, LC Vision's `text` can still be wired into the boxes directly.
