@@ -101,7 +101,7 @@ Below the cards: Confirm all / Unconfirm all / Clear edits, **Apply edit to all*
 
 The 13 MOSS views plus two extras:
 - **Front 3/4**: full body turned 45° toward image-right.
-- **Right side**: anatomical-right profile facing image-left. It is generated, not mirrored, so asymmetric details such as a side braid stay on their real side.
+- **Right side**: anatomical-left profile facing image-left. It is generated, not mirrored, so asymmetric details such as a side braid stay on their real side.
 
 The designer's Preset menu has **Muse template · 5 views** (Portrait, Front, Left side, Right side, Back), the set that fills the `template` output. It is the default for new nodes.
 
