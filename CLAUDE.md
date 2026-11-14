@@ -24,6 +24,7 @@ Fractions of a 4096 width: portrait 0-1280, front 1280-1984, left side (faces ri
 
 - No test suite: run `python -m py_compile moss_sheet/*.py`, and for prompt changes print `_view_prompt` output for a portrait and a body view from ComfyUI's venv.
 - ComfyUI must be restarted to load node changes. Work happens on branch `catalogue-support`; the remote ComfyUI only picks changes up after it pulls that branch and restarts.
+- New widget inputs go at the end of `INPUT_TYPES` `optional`: saved workflows store widget values by position, so a widget inserted in the middle shifts every later value into the wrong box.
 - Commit subjects follow the ComfyUI style (`Add ...`, `Fix ...`, `Use ...`). Keep the README tables in step with input or prompt changes.
 
 ## Related
