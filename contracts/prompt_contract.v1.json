@@ -74,7 +74,7 @@
       "name": "full-body anatomical-left profile",
       "kind": "body",
       "label": "character",
-      "caption": "A strict anatomical-left profile of the full body in a neutral standing pose. The nose, chest and toes point toward the right edge of the image. The complete head and both feet or footwear are inside the depiction; the character is not a mirrored copy of the front view."
+      "caption": "A true 90-degree side view (profile) of the full body, showing the character's anatomical left side, in a neutral standing pose. The nose, chest and toes point toward the right edge of the image. The complete head and both feet or footwear are inside the depiction; the character is not a mirrored copy of the front view."
     },
     "body_back": {
       "name": "full-body rear view",
@@ -116,7 +116,7 @@
       "name": "full-body anatomical-right profile",
       "kind": "body",
       "label": "character",
-      "caption": "A strict anatomical-right profile of the full body in a neutral standing pose. The nose, chest and toes point toward the left edge of the image. The complete head and both feet or footwear are inside the depiction; the character is not a mirrored copy of the left profile, so asymmetric details such as a side braid stay on their true side."
+      "caption": "A true 90-degree side view (profile) of the full body, showing the character's anatomical right side, in a neutral standing pose. The nose, chest and toes point toward the left edge of the image. The complete head and both feet or footwear are inside the depiction; the character is not a mirrored copy of the left profile, so asymmetric details such as a side braid stay on their true side."
     }
   },
   "group_names": {

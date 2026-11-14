@@ -68,7 +68,7 @@ Object.assign(EN, {
   garmentTip: 'Garments only, laid flat without a person',
   body_3q: 'Front 3/4', body_right: 'Right side', face_right: 'Right portrait', face_3q_left: 'Left 3/4', face_3q_right: 'Right 3/4', face_back: 'Rear portrait',
   clothing_front: 'Clothing front', clothing_back: 'Clothing back',
-  face_right_tip: 'Strict anatomical-right profile, head through chest',
+  face_right_tip: 'True 90-degree right side view (profile), head through chest',
   face_3q_left_tip: 'Front-left three-quarter bust, anatomical-left side',
   body_3q_tip: 'Full body turned 45 degrees; front and anatomical-left side visible',
   body_right_tip: 'Anatomical-right full-body profile; nose and toes toward the LEFT image edge (generated, not mirrored)',
