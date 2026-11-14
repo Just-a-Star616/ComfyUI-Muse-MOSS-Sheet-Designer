@@ -38,25 +38,25 @@
       "name": "right-facing profile portrait",
       "kind": "portrait",
       "label": "character",
-      "caption": "A head-and-chest portrait in strict side profile facing image-right, showing the character's anatomical right side. The complete head silhouette is visible, cropped at the upper chest."
+      "caption": "A head-and-shoulders portrait in strict side profile facing image-right, showing the character's anatomical right side. The complete head silhouette is visible, cropped at the upper chest."
     },
     "face_right": {
       "name": "left-facing profile portrait",
       "kind": "portrait",
       "label": "character",
-      "caption": "A head-and-chest portrait in strict side profile facing image-left, showing the character's anatomical left side. The complete head silhouette is visible, cropped at the upper chest."
+      "caption": "A head-and-shoulders portrait in strict side profile facing image-left, showing the character's anatomical left side. The complete head silhouette is visible, cropped at the upper chest."
     },
     "face_3q_left": {
       "name": "right-facing three-quarter portrait",
       "kind": "portrait",
       "label": "character",
-      "caption": "A head-and-chest portrait turned 45 degrees toward image-right, showing the front and the character's right cheek. The complete head silhouette is visible, cropped at the upper chest."
+      "caption": "A head-and-shoulders portrait turned 45 degrees toward image-right, showing the front and the character's right cheek. The complete head silhouette is visible, cropped at the upper chest."
     },
     "face_3q_right": {
       "name": "left-facing three-quarter portrait",
       "kind": "portrait",
       "label": "character",
-      "caption": "A head-and-chest portrait turned 45 degrees toward image-left, showing the front and the character's left cheek. The complete head silhouette is visible, cropped at the upper chest."
+      "caption": "A head-and-shoulders portrait turned 45 degrees toward image-left, showing the front and the character's left cheek. The complete head silhouette is visible, cropped at the upper chest."
     },
     "face_back": {
       "name": "rear portrait",
@@ -120,7 +120,7 @@
     }
   },
   "group_names": {
-    "portrait": "head-and-chest portraits",
+    "portrait": "head-and-shoulders portraits",
     "body": "full-body views",
     "clothing": "clothing studies",
     "detail": "detail close-ups"

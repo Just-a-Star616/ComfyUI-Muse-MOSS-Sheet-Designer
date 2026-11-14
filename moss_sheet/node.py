@@ -440,7 +440,7 @@ class MuseMossSheetDesigner:
             x0, y0, x1, y1 = panel["bbox_px"]
             aspect = (x1 - x0) / (y1 - y0)
             if panel["kind"] == "portrait":
-                # Tall portrait boxes (extended layouts) make the models draw a full body; keep head-and-chest framing.
+                # Tall portrait boxes (extended layouts) make the models draw a full body; keep head-and-shoulders framing.
                 aspect = min(max(aspect, 0.75), 1.33)
             gen_w, gen_h = _round32(math.sqrt(megapixels * 1e6 * aspect)), _round32(math.sqrt(megapixels * 1e6 / aspect))
             view_seed = seeds.get(view, seed + VIEWS.index(view))
