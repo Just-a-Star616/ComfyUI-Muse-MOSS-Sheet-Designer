@@ -28,6 +28,12 @@ async function presetsRequest(body) {
   return data;
 }
 
+// Part prompts saved with the outfit preset instead of the character preset.
+const OUTFIT_PARTS = ['upper_clothing', 'back_clothing', 'lower_body', 'footwear'];
+const splitParts = (parts = {}) => [Object.fromEntries(Object.entries(parts).filter(([k]) => !OUTFIT_PARTS.includes(k))),
+  Object.fromEntries(Object.entries(parts).filter(([k, v]) => OUTFIT_PARTS.includes(k) && v))];
+const readState = node => { try { return JSON.parse(getWidget(node, 'state_json')) || {}; } catch { return {}; } };
+
 function presetBar(node) {
   const status = el('span', {style: 'font-size:11px;color:#999;'});
   const button = (label, title, onclick) => el('button', {textContent: label, title, onclick, style: css + 'cursor:pointer;'});
@@ -44,19 +50,29 @@ function presetBar(node) {
       const p = presets[kind]?.[name.value];
       if (!p) { status.textContent = `No ${title.toLowerCase()} "${name.value}"`; return; }
       for (const k of fields) setWidget(node, k, p[k] ?? '');
-      if (withState && p.state_json) setWidget(node, 'state_json', p.state_json);
+      // Clothing part prompts belong to the outfit: a character load keeps the current ones, an outfit load replaces them.
+      const current = readState(node);
+      if (withState && p.state_json) {
+        let state = {};
+        try { state = JSON.parse(p.state_json); } catch { /* unreadable preset: keep the parts only */ }
+        setWidget(node, 'state_json', JSON.stringify({...state, part_prompts: {...splitParts(state.part_prompts)[0], ...splitParts(current.part_prompts)[1]}}));
+      } else if (!withState) {
+        setWidget(node, 'state_json', JSON.stringify({...current, part_prompts: {...splitParts(current.part_prompts)[0], ...p.part_prompts}}));
+      }
       status.textContent = `Loaded ${title.toLowerCase()} "${name.value}"`;
     };
     const save = () => {
       const n = name.value.trim();
       if (!n) return;
       const body = {kind, name: n, ...Object.fromEntries(fields.map(k => [k, getWidget(node, k) ?? '']))};
-      if (withState) body.state_json = getWidget(node, 'state_json');
+      const [own, clothing] = splitParts(readState(node).part_prompts);
+      if (withState) body.state_json = JSON.stringify({...readState(node), part_prompts: own});
+      else body.part_prompts = clothing;
       run(() => presetsRequest(body), `Saved ${title.toLowerCase()} "${n}"`);
     };
     const del = () => { if (name.value) run(() => presetsRequest({kind, name: name.value, delete: true}), `Deleted ${title.toLowerCase()} "${name.value}"`); };
     return el('div', {style: 'display:flex;gap:4px;align-items:center;'}, [label(title), name, list,
-      button('Load', `Load ${title.toLowerCase()} preset`, load), button('Save', `Save ${withState ? 'character description, body details, nsfw details and designer settings' : 'outfit'}`, save), button('Delete', '', del)]);
+      button('Load', `Load ${title.toLowerCase()} preset`, load), button('Save', `Save ${withState ? 'character description, body details, nsfw details and designer settings (clothing part prompts go with the outfit)' : 'outfit and its clothing part prompts (upper, back, lower, footwear)'}`, save), button('Delete', '', del)]);
   };
   let presets = {};
   const run = (fn, done) => fn().then(data => { presets = data; lists.forEach(f => f(data)); status.textContent = done; }).catch(e => { status.textContent = String(e.message || e); });

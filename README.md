@@ -110,8 +110,8 @@ Put shoes in the designer's **Footwear** part prompt rather than in `outfit`. Pa
 ## Presets
 
 Three rows above the view cards:
-- **Character**: Save stores `prompt` (character description), `body_details`, `nsfw_details` and the designer state (views, part prompts, style, layout); Load restores them.
-- **Outfit**: Save / Load / Delete just the `outfit` text, so one character can wear several outfits.
+- **Character**: Save stores `prompt` (character description), `body_details`, `nsfw_details` and the designer state (views, head/face/hands/other part prompts, style, layout); Load restores them and keeps the current clothing part prompts.
+- **Outfit**: Save / Load / Delete the `outfit` text and the clothing part prompts (upper, back, lower, footwear), so one character can wear several outfits. Load replaces the clothing part prompts.
 - **Prompt list**: Load selects that list for **▶ Prompt list**.
 
 Type a new name or pick an existing one in the Character and Outfit boxes. Presets are stored in `ComfyUI/user/default/muse_moss_sheet_presets.json`; files from older versions are split into characters and outfits on first read.

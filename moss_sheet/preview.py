@@ -33,6 +33,8 @@ async def preview_request(request):
 
 PRESETS_PATH = os.path.join(folder_paths.get_user_directory(), 'default', 'muse_moss_sheet_presets.json')
 
+# Clothing part prompts are saved with the outfit preset (web/muse_controls.js OUTFIT_PARTS).
+OUTFIT_PARTS = ('upper_clothing', 'back_clothing', 'lower_body', 'footwear')
 PRESET_FIELDS = {'characters': ('prompt', 'body_details', 'nsfw_details'), 'outfits': ('outfit',)}
 
 def load_presets():
@@ -63,6 +65,11 @@ async def presets_post(request):
         entry = {k: data.get(k, '') for k in PRESET_FIELDS[kind]}
         if not all(isinstance(v, str) for v in entry.values()):
             return web.json_response({'error': 'invalid preset'}, status=400)
+        if kind == 'outfits':
+            parts = data.get('part_prompts') or {}
+            if not isinstance(parts, dict) or not all(k in OUTFIT_PARTS and isinstance(v, str) and len(v) <= 1000 for k, v in parts.items()):
+                return web.json_response({'error': 'invalid part prompts'}, status=400)
+            entry['part_prompts'] = parts
         if kind == 'characters':
             try:
                 entry['state_json'] = compact(parse_state(data.get('state_json'), MAX_RESOLUTION))
