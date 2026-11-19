@@ -197,7 +197,7 @@ def _view_prompt(item, kind, state, profile, has_ref, pose_index=None):
     tail = (C["styles"][state["style"]], f"Shown alone on {C['backgrounds'][state['background']]}.")
     if has_ref:
         keep = "Same face, hairstyle, skin tone and outfit unchanged." if item["label"] == "character" else "Same outfit design, colors and materials as image 1."
-        pose = f"Match the exact pose, body proportions and framing of the grey mannequin in image {pose_index}, but not its appearance." if pose_index else ""
+        pose = f"Match the exact pose and framing of the grey mannequin in image {pose_index}, but not its appearance or body build." if pose_index else ""
         return " ".join(s for s in (f"The character from image 1. {caption}", pose, *details, *tail, keep) if s)
     return " ".join(s for s in (caption, *details, *tail) if s)
 
